@@ -6,23 +6,25 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "./components": {
-      "import": "./dist/components/index.js",
-      "types": "./dist/components/index.d.ts"
+      "types": "./dist/components/index.d.mts",
+      "import": "./dist/components/index.mjs"
     },
     "./lib": {
-      "import": "./dist/lib/index.js",
-      "types": "./dist/lib/index.d.ts"
+      "types": "./dist/lib/index.d.mts",
+      "import": "./dist/lib/index.mjs"
     },
-    "./styles": "./dist/styles.css"
+    "./pages": {
+      "types": "./dist/pages/index.d.mts",
+      "import": "./dist/pages/index.mjs"
+    }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --external react --external next --external @supabase/ssr",
-    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "test": "vitest",
     "test:ui": "vitest --ui",
