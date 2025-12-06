@@ -47,7 +47,7 @@ export const Input: React.FC<InputProps> = ({ label, icon: Icon, error, ...props
         </div>
       )}
       <input
-        className={`w-full bg-slate-50 border ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100'} rounded-lg py-2.5 ${Icon ? 'pl-10' : 'pl-3'} pr-3 text-sm outline-none transition-all focus:ring-4`}
+        className={`w-full bg-slate-50 border ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100'} rounded-lg py-2.5 ${Icon ? 'pl-10' : 'pl-3'} pr-3 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500`}
         {...props}
       />
     </div>

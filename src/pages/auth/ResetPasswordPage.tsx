@@ -114,7 +114,7 @@ export function createResetPasswordPage(props: ResetPasswordPageProps) {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
                     required
                   />
                   <button
@@ -140,7 +140,7 @@ export function createResetPasswordPage(props: ResetPasswordPageProps) {
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
                     required
                   />
                   <button

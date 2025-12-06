@@ -83,7 +83,7 @@ export function createForgotPasswordPage(props: ForgotPasswordPageProps) {
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-3 text-sm outline-none transition-all focus:ring-4"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-3 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
                     required
                   />
                 </div>
