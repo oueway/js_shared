@@ -3,7 +3,7 @@
 ## Package Structure
 
 ```
-oueway-shared/
+js-shared/
 ├── src/
 │   ├── lib/
 │   │   ├── client.ts          # Browser Supabase client factory
@@ -58,14 +58,14 @@ oueway-shared/
 import { Button } from '@/app/dashboard/components';
 
 // Use package imports
-import { Button } from '@oueway/oueway-shared/components';
+import { Button } from '@oueway/js-shared/components';
 ```
 
 2. **Update Supabase client:**
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@oueway/oueway-shared/lib';
+import { createClient } from '@oueway/js-shared/lib';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -77,7 +77,7 @@ export const supabase = createClient(
 
 ```typescript
 // proxy.ts
-import { createProxy } from '@oueway/oueway-shared/lib';
+import { createProxy } from '@oueway/js-shared/lib';
 
 export const proxy = createProxy({
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -99,7 +99,7 @@ export const proxy = createProxy({
 ## Building the Package
 
 ```bash
-cd packages/oueway-shared
+cd packages/js-shared
 pnpm install
 pnpm build
 ```
@@ -126,14 +126,14 @@ Then in your apps:
 ```json
 {
   "dependencies": {
-    "@oueway/oueway-shared": "workspace:*"
+    "@oueway/js-shared": "workspace:*"
   }
 }
 ```
 
 ### Option 3: Git Submodule
 ```bash
-git submodule add <repo-url> packages/oueway-shared
+git submodule add <repo-url> packages/js-shared
 ```
 
 ## Next Steps

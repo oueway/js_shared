@@ -1,6 +1,6 @@
-# @oueway/oueway-shared - Usage Example
+# @oueway/js-shared - Usage Example
 
-This guide shows how to integrate the oueway-shared package into your Next.js application.
+This guide shows how to integrate the js-shared package into your Next.js application.
 
 ## Project Structure
 
@@ -36,7 +36,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@oueway/oueway-shared/lib';
+import { createClient } from '@oueway/js-shared/lib';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -48,7 +48,7 @@ export const supabase = createClient(
 
 ```typescript
 // proxy.ts (Next.js 16+) or middleware.ts (Next.js 15-)
-import { createProxy } from '@oueway/oueway-shared/lib';
+import { createProxy } from '@oueway/js-shared/lib';
 
 export const proxy = createProxy({
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -78,7 +78,7 @@ You'll need to create your own auth pages that use the package's UI components a
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Button, Input } from '@oueway/oueway-shared/components';
+import { Button, Input } from '@oueway/js-shared/components';
 import { Mail, Lock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -158,7 +158,7 @@ export default function LoginPage() {
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Button, Input } from '@oueway/oueway-shared/components';
+import { Button, Input } from '@oueway/js-shared/components';
 import { Mail, Lock, User } from 'lucide-react';
 import Link from 'next/link';
 
@@ -258,7 +258,7 @@ Similar to auth pages, you'll create your own dashboard pages using the package'
 ### Custom Logo
 
 ```typescript
-import { HeaderLogo } from '@oueway/oueway-shared/components';
+import { HeaderLogo } from '@oueway/js-shared/components';
 
 <HeaderLogo 
   onClick={() => router.push('/')}

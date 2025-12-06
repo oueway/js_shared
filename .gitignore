@@ -4,3 +4,8 @@ dist
 *.log
 .env
 .env.local
+
+# Test coverage
+coverage
+.nyc_output
+*.lcov

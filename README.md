@@ -1,4 +1,4 @@
-# @oueway/oueway-shared
+# @oueway/js-shared
 
 Reusable authentication utilities and UI components for Supabase-powered Next.js applications.
 
@@ -11,6 +11,7 @@ Reusable authentication utilities and UI components for Supabase-powered Next.js
 - 🎯 Full TypeScript support
 - 🔄 Works with multiple Supabase projects
 - ⚡ Build your own auth pages with provided components
+- ✅ **Comprehensive test coverage with Vitest + React Testing Library** (50 tests, 86%+ coverage)
 
 ## Why This Approach?
 
@@ -25,9 +26,9 @@ This package provides **reusable utilities and components** rather than complete
 ## Installation
 
 ```bash
-npm install @oueway/oueway-shared @supabase/ssr @supabase/supabase-js lucide-react
+npm install @oueway/js-shared @supabase/ssr @supabase/supabase-js lucide-react
 # or
-pnpm add @oueway/oueway-shared @supabase/ssr @supabase/supabase-js lucide-react
+pnpm add @oueway/js-shared @supabase/ssr @supabase/supabase-js lucide-react
 ```
 
 ## Quick Start
@@ -43,7 +44,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@oueway/oueway-shared/lib';
+import { createClient } from '@oueway/js-shared/lib';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,7 +56,7 @@ export const supabase = createClient(
 
 ```typescript
 // proxy.ts (Next.js 16+) or middleware.ts (Next.js 15-)
-import { createProxy } from '@oueway/oueway-shared/lib';
+import { createProxy } from '@oueway/js-shared/lib';
 
 export const proxy = createProxy({
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -83,7 +84,7 @@ Use the provided components to build your own auth pages:
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Button, Input } from '@oueway/oueway-shared/components';
+import { Button, Input } from '@oueway/js-shared/components';
 import { Mail, Lock } from 'lucide-react';
 
 export default function LoginPage() {
@@ -190,9 +191,42 @@ The components use Tailwind CSS classes. Make sure your project has Tailwind con
 Full TypeScript support with exported types:
 
 ```typescript
-import type { AuthConfig, ProxyConfig } from '@oueway/oueway-shared/lib';
-import type { HeaderLogoProps } from '@oueway/oueway-shared/components';
+import type { AuthConfig, ProxyConfig } from '@oueway/js-shared/lib';
+import type { HeaderLogoProps } from '@oueway/js-shared/components';
 ```
+
+## Testing
+
+This package includes comprehensive test coverage using Vitest and React Testing Library.
+
+### Running Tests
+
+```bash
+# Run all tests
+pnpm test
+
+# Watch mode
+pnpm test --watch
+
+# Coverage report
+pnpm test:coverage
+
+# UI mode
+pnpm test:ui
+```
+
+### Test Coverage
+
+- **50 test cases** across 6 test files
+- **86%+ code coverage**
+- Tests for components, utilities, and authentication pages
+- Full mocking of Supabase client
+- User interaction testing with @testing-library/user-event
+
+For more details, see:
+- [TESTING.md](./TESTING.md) - Complete testing guide
+- [TEST_QUICK_REFERENCE.md](./TEST_QUICK_REFERENCE.md) - Quick reference
+- [TEST_SUMMARY.md](./TEST_SUMMARY.md) - Test coverage summary
 
 ## License
 
