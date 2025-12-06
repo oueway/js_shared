@@ -1,14 +1,9 @@
 # Package Creation Summary
 
-## What Was Created
-
-A reusable authentication and dashboard package at:
-`/packages/auth-dashboard/`
-
 ## Package Structure
 
 ```
-packages/auth-dashboard/
+oueway-shared/
 ├── src/
 │   ├── lib/
 │   │   ├── client.ts          # Browser Supabase client factory
@@ -63,14 +58,14 @@ packages/auth-dashboard/
 import { Button } from '@/app/dashboard/components';
 
 // Use package imports
-import { Button } from '@oueway/auth-dashboard/components';
+import { Button } from '@oueway/oueway-shared/components';
 ```
 
 2. **Update Supabase client:**
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@oueway/auth-dashboard/lib';
+import { createClient } from '@oueway/oueway-shared/lib';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -82,7 +77,7 @@ export const supabase = createClient(
 
 ```typescript
 // proxy.ts
-import { createProxy } from '@oueway/auth-dashboard/lib';
+import { createProxy } from '@oueway/oueway-shared/lib';
 
 export const proxy = createProxy({
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -104,7 +99,7 @@ export const proxy = createProxy({
 ## Building the Package
 
 ```bash
-cd packages/auth-dashboard
+cd packages/oueway-shared
 pnpm install
 pnpm build
 ```
@@ -131,14 +126,14 @@ Then in your apps:
 ```json
 {
   "dependencies": {
-    "@oueway/auth-dashboard": "workspace:*"
+    "@oueway/oueway-shared": "workspace:*"
   }
 }
 ```
 
 ### Option 3: Git Submodule
 ```bash
-git submodule add <repo-url> packages/auth-dashboard
+git submodule add <repo-url> packages/oueway-shared
 ```
 
 ## Next Steps

@@ -1,5 +1,5 @@
 {
-  "name": "@oueway/auth-dashboard",
+  "name": "@oueway/oueway-shared",
   "version": "1.0.0",
   "description": "Reusable authentication and dashboard components for Supabase-powered Next.js apps",
   "main": "./dist/index.js",

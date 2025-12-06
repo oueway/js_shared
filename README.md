@@ -1,4 +1,4 @@
-# @oueway/auth-dashboard
+# @oueway/oueway-shared
 
 Reusable authentication utilities and UI components for Supabase-powered Next.js applications.
 
@@ -25,9 +25,9 @@ This package provides **reusable utilities and components** rather than complete
 ## Installation
 
 ```bash
-npm install @oueway/auth-dashboard @supabase/ssr @supabase/supabase-js lucide-react
+npm install @oueway/oueway-shared @supabase/ssr @supabase/supabase-js lucide-react
 # or
-pnpm add @oueway/auth-dashboard @supabase/ssr @supabase/supabase-js lucide-react
+pnpm add @oueway/oueway-shared @supabase/ssr @supabase/supabase-js lucide-react
 ```
 
 ## Quick Start
@@ -43,7 +43,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@oueway/auth-dashboard/lib';
+import { createClient } from '@oueway/oueway-shared/lib';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,7 +55,7 @@ export const supabase = createClient(
 
 ```typescript
 // proxy.ts (Next.js 16+) or middleware.ts (Next.js 15-)
-import { createProxy } from '@oueway/auth-dashboard/lib';
+import { createProxy } from '@oueway/oueway-shared/lib';
 
 export const proxy = createProxy({
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -83,7 +83,7 @@ Use the provided components to build your own auth pages:
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Button, Input } from '@oueway/auth-dashboard/components';
+import { Button, Input } from '@oueway/oueway-shared/components';
 import { Mail, Lock } from 'lucide-react';
 
 export default function LoginPage() {
@@ -190,8 +190,8 @@ The components use Tailwind CSS classes. Make sure your project has Tailwind con
 Full TypeScript support with exported types:
 
 ```typescript
-import type { AuthConfig, ProxyConfig } from '@oueway/auth-dashboard/lib';
-import type { HeaderLogoProps } from '@oueway/auth-dashboard/components';
+import type { AuthConfig, ProxyConfig } from '@oueway/oueway-shared/lib';
+import type { HeaderLogoProps } from '@oueway/oueway-shared/components';
 ```
 
 ## License
