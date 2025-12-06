@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Lock, Loader2, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { TextField } from '../../components/ui';
 
 export interface ResetPasswordPageProps {
   supabase: SupabaseClient;
@@ -101,57 +102,47 @@ export function createResetPasswordPage(props: ResetPasswordPageProps) {
           {/* Form */}
           <div className="p-8">
             <form onSubmit={handleResetPassword} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700 block">New Password</label>
-                <div className="relative group">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                    <Lock size={18} />
-                  </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    autoComplete="new-password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
-                    required
-                  />
+              <TextField
+                label="New Password"
+                icon={Lock}
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                autoComplete="new-password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                rightElement={
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                </div>
-              </div>
+                }
+              />
 
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700 block">Confirm Password</label>
-                <div className="relative group">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                    <Lock size={18} />
-                  </div>
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    name="confirm-password"
-                    autoComplete="new-password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-10 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
-                    required
-                  />
+              <TextField
+                label="Confirm Password"
+                icon={Lock}
+                type={showConfirmPassword ? 'text' : 'password'}
+                name="confirm-password"
+                autoComplete="new-password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                rightElement={
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                </div>
-              </div>
+                }
+              />
 
               {error && (
                 <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-start gap-2">

@@ -31,15 +31,30 @@ export const Button: React.FC<ButtonProps> = ({
   );
 };
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: React.ComponentType<{ size?: number }>;
+  icon?: React.ComponentType<any>;
   error?: string;
+  rightElement?: React.ReactNode;
+  labelRight?: React.ReactNode;
 }
 
-export const Input: React.FC<InputProps> = ({ label, icon: Icon, error, ...props }) => (
+export const TextField: React.FC<TextFieldProps> = ({ 
+  label, 
+  icon: Icon, 
+  error, 
+  rightElement,
+  labelRight,
+  className,
+  ...props 
+}) => (
   <div className="space-y-1.5">
-    {label && <label className="text-sm font-medium text-slate-700 block">{label}</label>}
+    {(label || labelRight) && (
+      <div className="flex items-center justify-between">
+        {label && <label className="text-sm font-medium text-slate-700 block">{label}</label>}
+        {labelRight}
+      </div>
+    )}
     <div className="relative group">
       {Icon && (
         <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
@@ -47,9 +62,14 @@ export const Input: React.FC<InputProps> = ({ label, icon: Icon, error, ...props
         </div>
       )}
       <input
-        className={`w-full bg-slate-50 border ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100'} rounded-lg py-2.5 ${Icon ? 'pl-10' : 'pl-3'} pr-3 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500`}
+        className={`w-full bg-slate-50 border ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100'} rounded-lg py-2.5 ${Icon ? 'pl-10' : 'pl-3'} ${rightElement ? 'pr-10' : 'pr-3'} text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-200 ${className || ''}`}
         {...props}
       />
+      {rightElement && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          {rightElement}
+        </div>
+      )}
     </div>
     {error && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle size={12} /> {error}</p>}
   </div>

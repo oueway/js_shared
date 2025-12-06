@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Mail, Loader2, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { TextField } from '../../components/ui';
 
 export interface ForgotPasswordPageProps {
   supabase: SupabaseClient;
@@ -70,24 +71,17 @@ export function createForgotPasswordPage(props: ForgotPasswordPageProps) {
           {/* Form */}
           <div className="p-8">
             <form onSubmit={handleResetPassword} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700 block">Email</label>
-                <div className="relative group">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                    <Mail size={18} />
-                  </div>
-                  <input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="name@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100 rounded-lg py-2.5 pl-10 pr-3 text-sm outline-none transition-all focus:ring-4 placeholder:text-slate-500"
-                    required
-                  />
-                </div>
-              </div>
+              <TextField
+                label="Email"
+                icon={Mail}
+                type="email"
+                name="email"
+                autoComplete="email"
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
 
               {error && (
                 <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-start gap-2">
