@@ -4,26 +4,23 @@ import React, { useState, useEffect } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { Lock, Loader2, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { TextField } from '../../components/ui';
+import { useAuthUIConfig } from '../../lib/auth-ui-config';
+import { useSupabase } from '../../lib/context';
 
 export interface ResetPasswordPageProps {
-  supabase: SupabaseClient;
-  logoLetter?: string;
-  companyName?: string;
   redirectAfterReset?: string;
-  loginLink?: string;
 }
 
-export function createResetPasswordPage(props: ResetPasswordPageProps) {
-  const {
-    supabase,
-    logoLetter = 'O',
-    companyName,
-    redirectAfterReset = '/login',
-    loginLink = '/login',
-  } = props;
+export function createResetPasswordPage(props?: ResetPasswordPageProps) {
+  const { redirectAfterReset = '/login' } = props || {};
 
   return function ResetPasswordPage() {
+    const supabase = useSupabase();
+    const config = useAuthUIConfig();
+    const { logo = 'O', appName, loginLink = '/login', homePage = '/' } = config;
+
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -90,12 +87,22 @@ export function createResetPasswordPage(props: ResetPasswordPageProps) {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
           {/* Header */}
           <div className="bg-white p-8 pb-0 text-center">
+            {homePage && (
+              <div className="mb-4 text-left">
+                <Link href={homePage} className="inline-flex items-center text-sm text-slate-500 hover:text-indigo-600 transition-colors">
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Home
+                </Link>
+              </div>
+            )}
             <div className="h-12 w-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-200 mb-6">
-              {logoLetter}
+              {logo}
             </div>
             <h2 className="text-2xl font-bold text-slate-900">Set new password</h2>
             <p className="text-slate-500 mt-2 text-sm">
-              {companyName ? `Enter your new ${companyName} password` : 'Enter your new password below'}
+              {appName ? `Enter your new ${appName} password` : 'Enter your new password below'}
             </p>
           </div>
 

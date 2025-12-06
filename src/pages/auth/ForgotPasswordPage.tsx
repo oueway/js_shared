@@ -5,25 +5,21 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { Mail, Loader2, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { TextField } from '../../components/ui';
+import { useAuthUIConfig } from '../../lib/auth-ui-config';
+import { useSupabase } from '../../lib/context';
 
 export interface ForgotPasswordPageProps {
-  supabase: SupabaseClient;
-  logoLetter?: string;
-  companyName?: string;
   resetPasswordUrl?: string;
-  loginLink?: string;
 }
 
-export function createForgotPasswordPage(props: ForgotPasswordPageProps) {
-  const {
-    supabase,
-    logoLetter = 'O',
-    companyName,
-    resetPasswordUrl,
-    loginLink = '/login',
-  } = props;
+export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
+  const { resetPasswordUrl } = props || {};
 
   return function ForgotPasswordPage() {
+    const supabase = useSupabase();
+    const config = useAuthUIConfig();
+    const { logo = 'O', appName, loginLink = '/login', homePage = '/' } = config;
+
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -59,12 +55,22 @@ export function createForgotPasswordPage(props: ForgotPasswordPageProps) {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
           {/* Header */}
           <div className="bg-white p-8 pb-0 text-center">
+            {homePage && (
+              <div className="mb-4 text-left">
+                <Link href={homePage} className="inline-flex items-center text-sm text-slate-500 hover:text-indigo-600 transition-colors">
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Home
+                </Link>
+              </div>
+            )}
             <div className="h-12 w-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-200 mb-6">
-              {logoLetter}
+              {logo}
             </div>
             <h2 className="text-2xl font-bold text-slate-900">Reset your password</h2>
             <p className="text-slate-500 mt-2 text-sm">
-              {companyName ? `Enter your ${companyName} email to receive a reset link` : "Enter your email and we'll send you a reset link"}
+              {appName ? `Enter your ${appName} email to receive a reset link` : "Enter your email and we'll send you a reset link"}
             </p>
           </div>
 

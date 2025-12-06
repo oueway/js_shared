@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createLoginPage } from './LoginPage';
 import { createMockSupabaseClient } from '../../test/mocks';
+import { renderWithAuth } from '../../test/utils';
 
 describe('LoginPage', () => {
   let mockSupabase: ReturnType<typeof createMockSupabaseClient>;
@@ -20,12 +21,13 @@ describe('LoginPage', () => {
         origin: 'http://localhost:3000',
       },
     });
+    
+    LoginPage = createLoginPage({ supabase: mockSupabase });
   });
 
   describe('基本渲染', () => {
     it('应该渲染登录表单', () => {
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />);
 
       expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/name@company.com/i)).toBeInTheDocument();
@@ -34,28 +36,23 @@ describe('LoginPage', () => {
     });
 
     it('应该显示自定义公司名称', () => {
-      LoginPage = createLoginPage({
-        supabase: mockSupabase,
-        companyName: 'TestCompany',
+      renderWithAuth(<LoginPage />, {
+        uiConfig: { companyName: 'TestCompany' },
       });
-      render(<LoginPage />);
 
       expect(screen.getByText(/Welcome to TestCompany/i)).toBeInTheDocument();
     });
 
     it('应该显示自定义logo字母', () => {
-      LoginPage = createLoginPage({
-        supabase: mockSupabase,
-        logoLetter: 'T',
+      renderWithAuth(<LoginPage />, {
+        uiConfig: { logoLetter: 'T' },
       });
-      render(<LoginPage />);
 
       expect(screen.getByText('T')).toBeInTheDocument();
     });
 
     it('应该默认启用OAuth登录选项', () => {
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />);
 
       expect(screen.getByRole('button', { name: /google/i })).toBeInTheDocument();
     });
