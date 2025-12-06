@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRegisterPage } from './RegisterPage';
 import { createMockSupabaseClient } from '../../test/mocks';
+import { renderWithAuth } from '../../test/utils';
 
 describe('RegisterPage', () => {
   let mockSupabase: ReturnType<typeof createMockSupabaseClient>;
@@ -11,12 +12,13 @@ describe('RegisterPage', () => {
   beforeEach(() => {
     mockSupabase = createMockSupabaseClient();
     vi.clearAllMocks();
+    
+    RegisterPage = createRegisterPage();
   });
 
   describe('基本渲染', () => {
     it('应该渲染注册表单', () => {
-      RegisterPage = createRegisterPage({ supabase: mockSupabase });
-      render(<RegisterPage />);
+      renderWithAuth(<RegisterPage />, { supabase: mockSupabase });
 
       expect(screen.getByPlaceholderText(/name@company.com/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/••••••••/)).toBeInTheDocument();
@@ -24,11 +26,10 @@ describe('RegisterPage', () => {
     });
 
     it('应该显示自定义公司名称', () => {
-      RegisterPage = createRegisterPage({
+      renderWithAuth(<RegisterPage />, {
         supabase: mockSupabase,
-        companyName: 'TestCompany',
+        uiConfig: { appName: 'TestCompany' },
       });
-      render(<RegisterPage />);
 
       expect(screen.getByText(/TestCompany/i)).toBeInTheDocument();
     });
@@ -42,8 +43,7 @@ describe('RegisterPage', () => {
         error: null,
       });
 
-      RegisterPage = createRegisterPage({ supabase: mockSupabase });
-      render(<RegisterPage />);
+      renderWithAuth(<RegisterPage />, { supabase: mockSupabase });
 
       const nameInput = screen.getByPlaceholderText(/Full Name/i);
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
@@ -70,8 +70,7 @@ describe('RegisterPage', () => {
         error: { message: 'Email already exists' },
       });
 
-      RegisterPage = createRegisterPage({ supabase: mockSupabase });
-      render(<RegisterPage />);
+      renderWithAuth(<RegisterPage />, { supabase: mockSupabase });
 
       const nameInput = screen.getByPlaceholderText(/Full Name/i);
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
@@ -91,11 +90,10 @@ describe('RegisterPage', () => {
 
   describe('导航链接', () => {
     it('应该显示登录链接', () => {
-      RegisterPage = createRegisterPage({
+      renderWithAuth(<RegisterPage />, {
         supabase: mockSupabase,
-        loginLink: '/login',
+        uiConfig: { loginLink: '/login' },
       });
-      render(<RegisterPage />);
 
       const loginLink = screen.getByText(/Log in/i).closest('a');
       expect(loginLink).toHaveAttribute('href', '/login');

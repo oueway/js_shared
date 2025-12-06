@@ -29,7 +29,8 @@
     "prepare": "pnpm build",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "release": "pnpm version patch && git push && git push --tags"
   },
   "keywords": [
     "supabase",

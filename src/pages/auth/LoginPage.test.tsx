@@ -22,12 +22,12 @@ describe('LoginPage', () => {
       },
     });
     
-    LoginPage = createLoginPage({ supabase: mockSupabase });
+    LoginPage = createLoginPage();
   });
 
   describe('基本渲染', () => {
     it('应该渲染登录表单', () => {
-      renderWithAuth(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/name@company.com/i)).toBeInTheDocument();
@@ -37,7 +37,8 @@ describe('LoginPage', () => {
 
     it('应该显示自定义公司名称', () => {
       renderWithAuth(<LoginPage />, {
-        uiConfig: { companyName: 'TestCompany' },
+        uiConfig: { appName: 'TestCompany' },
+        supabase: mockSupabase,
       });
 
       expect(screen.getByText(/Welcome to TestCompany/i)).toBeInTheDocument();
@@ -45,24 +46,24 @@ describe('LoginPage', () => {
 
     it('应该显示自定义logo字母', () => {
       renderWithAuth(<LoginPage />, {
-        uiConfig: { logoLetter: 'T' },
+        uiConfig: { logo: 'T' },
+        supabase: mockSupabase,
       });
 
       expect(screen.getByText('T')).toBeInTheDocument();
     });
 
     it('应该默认启用OAuth登录选项', () => {
-      renderWithAuth(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       expect(screen.getByRole('button', { name: /google/i })).toBeInTheDocument();
     });
 
     it('应该可以禁用OAuth登录', () => {
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        enableOAuth: false,
+        uiConfig: { enableOAuth: false },
       });
-      render(<LoginPage />);
 
       expect(screen.queryByRole('button', { name: /google/i })).not.toBeInTheDocument();
     });
@@ -76,11 +77,10 @@ describe('LoginPage', () => {
         error: null 
       });
 
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        redirectAfterLogin: '/dashboard',
+        uiConfig: { redirectAfterLogin: '/dashboard' },
       });
-      render(<LoginPage />);
 
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
       const passwordInput = screen.getByPlaceholderText(/••••••••/);
@@ -107,8 +107,7 @@ describe('LoginPage', () => {
         error: { message: 'Invalid credentials' },
       });
 
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
       const passwordInput = screen.getByPlaceholderText(/••••••••/);
@@ -129,8 +128,7 @@ describe('LoginPage', () => {
         () => new Promise(resolve => setTimeout(() => resolve({ data: null, error: null }), 100))
       );
 
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
       const passwordInput = screen.getByPlaceholderText(/••••••••/);
@@ -146,8 +144,7 @@ describe('LoginPage', () => {
 
     it('应该支持切换密码可见性', async () => {
       const user = userEvent.setup();
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const passwordInput = screen.getByPlaceholderText(/••••••••/) as HTMLInputElement;
       // Find all buttons and get the toggle button (not the submit button)
@@ -175,8 +172,7 @@ describe('LoginPage', () => {
         error: null 
       });
 
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const googleButton = screen.getByRole('button', { name: /google/i });
       await user.click(googleButton);
@@ -196,11 +192,10 @@ describe('LoginPage', () => {
         error: null 
       });
 
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        authCallbackUrl: 'https://example.com/custom-callback',
+        uiConfig: { authCallbackUrl: 'https://example.com/custom-callback' },
       });
-      render(<LoginPage />);
 
       const googleButton = screen.getByRole('button', { name: /google/i });
       await user.click(googleButton);
@@ -220,8 +215,7 @@ describe('LoginPage', () => {
         error: { message: 'OAuth provider error' },
       });
 
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const googleButton = screen.getByRole('button', { name: /google/i });
       await user.click(googleButton);
@@ -232,11 +226,10 @@ describe('LoginPage', () => {
     });
 
     it('应该只显示配置的OAuth providers', () => {
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        oauthProviders: ['google'],
+        uiConfig: { oauthProviders: ['google'] },
       });
-      render(<LoginPage />);
 
       expect(screen.getByRole('button', { name: /google/i })).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /apple/i })).not.toBeInTheDocument();
@@ -245,22 +238,20 @@ describe('LoginPage', () => {
 
   describe('导航链接', () => {
     it('应该显示忘记密码链接', () => {
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        forgotPasswordLink: '/forgot-password',
+        uiConfig: { forgotPasswordLink: '/forgot-password' },
       });
-      render(<LoginPage />);
 
       const forgotLink = screen.getByText(/forgot password/i).closest('a');
       expect(forgotLink).toHaveAttribute('href', '/forgot-password');
     });
 
     it('应该显示注册链接', () => {
-      LoginPage = createLoginPage({
+      renderWithAuth(<LoginPage />, {
         supabase: mockSupabase,
-        registerLink: '/register',
+        uiConfig: { registerLink: '/register' },
       });
-      render(<LoginPage />);
 
       const registerLink = screen.getByText(/sign up/i).closest('a');
       expect(registerLink).toHaveAttribute('href', '/register');
@@ -270,8 +261,7 @@ describe('LoginPage', () => {
   describe('表单验证', () => {
     it('应该不能提交空表单', async () => {
       const user = userEvent.setup();
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const submitButton = screen.getByRole('button', { name: /sign in/i });
       await user.click(submitButton);
@@ -292,8 +282,7 @@ describe('LoginPage', () => {
           error: { message: 'Second error' },
         });
 
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const emailInput = screen.getByPlaceholderText(/name@company.com/i);
       const passwordInput = screen.getByPlaceholderText(/••••••••/);
@@ -322,16 +311,14 @@ describe('LoginPage', () => {
 
   describe('可访问性', () => {
     it('应该有正确的表单输入', () => {
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       expect(screen.getByPlaceholderText(/name@company.com/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/••••••••/)).toBeInTheDocument();
     });
 
     it('应该有正确的按钮角色', () => {
-      LoginPage = createLoginPage({ supabase: mockSupabase });
-      render(<LoginPage />);
+      renderWithAuth(<LoginPage />, { supabase: mockSupabase });
 
       const submitButton = screen.getByRole('button', { name: /sign in/i });
       expect(submitButton).toHaveAttribute('type', 'submit');

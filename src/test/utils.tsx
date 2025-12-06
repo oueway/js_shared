@@ -30,7 +30,7 @@ export function renderWithAuth(
   const mergedConfig = { ...defaultConfig, ...config };
   const defaultUIConfig: AuthUIConfig = {
     logo: 'O',
-    companyName: undefined,
+    appName: undefined,
     enableOAuth: true,
     oauthProviders: ['google', 'apple'],
     redirectAfterLogin: '/dashboard',
@@ -39,6 +39,7 @@ export function renderWithAuth(
     registerLink: '/register',
     loginLink: '/login',
     authCallbackUrl: undefined,
+    homePage: '/',
   };
   const mergedUIConfig = { ...defaultUIConfig, ...uiConfig };
 
