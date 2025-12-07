@@ -37,9 +37,9 @@ export function useAuthUIConfig(): AuthUIConfig {
     // 返回默认配置而不是抛出错误
     return {
       logo: 'O',
-      appName: undefined,
+      appName: 'Unnamed App',
       enableOAuth: true,
-      oauthProviders: undefined,
+      oauthProviders: [],
       redirectAfterLogin: '/app',
       redirectAfterRegister: '/auth/login',
       forgotPasswordLink: '/auth/forgot-password',

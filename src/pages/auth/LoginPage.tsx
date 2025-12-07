@@ -14,12 +14,12 @@ export function createLoginPage() {
     const config = useAuthUIConfig();
     const {
       logo = 'O',
-      appName,
+      appName = '',
       enableOAuth = true,
-      oauthProviders = ['google', 'apple'],
-      redirectAfterLogin = '/',
-      forgotPasswordLink = '/forgot-password',
-      registerLink = '/register',
+      oauthProviders = [],
+      redirectAfterLogin = '',
+      forgotPasswordLink = '',
+      registerLink = '',
       authCallbackUrl,
       homePage = '/',
     } = config;

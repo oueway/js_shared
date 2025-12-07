@@ -1,11 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createClient } from './client';
+import { createBrowserClient } from '@supabase/ssr';
 
 // Mock @supabase/ssr
 vi.mock('@supabase/ssr', () => ({
-  createBrowserClient: vi.fn((url, key) => ({
-    _url: url,
-    _key: key,
+  createBrowserClient: vi.fn(() => ({
     auth: {
       signInWithPassword: vi.fn(),
       signOut: vi.fn(),
@@ -25,10 +24,8 @@ describe('createClient', () => {
     const client = createClient(mockUrl, mockKey);
     
     expect(client).toBeDefined();
-    expect(client._url).toBe(mockUrl);
-    expect(client._key).toBe(mockKey);
+    expect(createBrowserClient).toHaveBeenCalledWith(mockUrl, mockKey);
   });
-
   it('应该返回具有auth方法的客户端', () => {
     const client = createClient(mockUrl, mockKey);
     
@@ -38,10 +35,10 @@ describe('createClient', () => {
   });
 
   it('应该为不同的URL和key创建不同的客户端', () => {
-    const client1 = createClient('https://test1.supabase.co', 'key1');
-    const client2 = createClient('https://test2.supabase.co', 'key2');
+    createClient('https://test1.supabase.co', 'key1');
+    createClient('https://test2.supabase.co', 'key2');
     
-    expect(client1._url).not.toBe(client2._url);
-    expect(client1._key).not.toBe(client2._key);
+    expect(createBrowserClient).toHaveBeenCalledWith('https://test1.supabase.co', 'key1');
+    expect(createBrowserClient).toHaveBeenCalledWith('https://test2.supabase.co', 'key2');
   });
 });
