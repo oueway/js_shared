@@ -1,4 +1,4 @@
-import { render, RenderOptions } from '@testing-library/react';
+import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { AuthProvider } from '../lib/context';
 import { AuthUIProvider, AuthUIConfig } from '../lib/auth-ui-config';
@@ -8,11 +8,6 @@ import type { AuthConfig } from '../lib/context';
 const defaultConfig: AuthConfig = {
   supabaseUrl: 'https://test.supabase.co',
   supabaseAnonKey: 'test-key',
-  companyName: 'Test Company',
-  logoLetter: 'T',
-  redirectAfterLogin: '/dashboard',
-  enableOAuth: true,
-  oauthProviders: ['google', 'github'],
 };
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -24,7 +19,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
 export function renderWithAuth(
   ui: ReactElement,
   options?: CustomRenderOptions
-) {
+): RenderResult {
   const { config = {}, uiConfig = {}, supabase = createMockSupabaseClient(), ...renderOptions } = options || {};
   
   const mergedConfig = { ...defaultConfig, ...config };

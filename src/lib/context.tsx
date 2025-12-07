@@ -6,13 +6,6 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export interface AuthConfig {
   supabaseUrl: string;
   supabaseAnonKey: string;
-  redirectAfterLogin?: string;
-  redirectAfterLogout?: string;
-  redirectAfterRegister?: string;
-  enableOAuth?: boolean;
-  oauthProviders?: Array<'google' | 'github' | 'apple' | 'facebook' | 'twitter'>;
-  companyName?: string;
-  logoLetter?: string;
 }
 
 interface AuthContextValue {

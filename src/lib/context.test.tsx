@@ -8,11 +8,6 @@ describe('AuthContext', () => {
   const mockConfig: AuthConfig = {
     supabaseUrl: 'https://test.supabase.co',
     supabaseAnonKey: 'test-key',
-    companyName: 'Test Company',
-    logoLetter: 'T',
-    redirectAfterLogin: '/dashboard',
-    enableOAuth: true,
-    oauthProviders: ['google', 'github'],
   };
 
   const mockSupabase = createMockSupabaseClient();
@@ -31,7 +26,7 @@ describe('AuthContext', () => {
     it('应该提供context值给children', () => {
       const TestComponent = () => {
         const { config } = useAuthConfig();
-        return <div>{config.companyName}</div>;
+        return <div>{config.supabaseUrl}</div>;
       };
 
       render(
@@ -40,7 +35,7 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      expect(screen.getByText('Test Company')).toBeInTheDocument();
+      expect(screen.getByText('https://test.supabase.co')).toBeInTheDocument();
     });
   });
 
@@ -50,7 +45,7 @@ describe('AuthContext', () => {
         const { config, supabase } = useAuthConfig();
         return (
           <div>
-            <div>{config.companyName}</div>
+            <div>{config.supabaseUrl}</div>
             <div>{supabase ? 'Supabase Available' : 'No Supabase'}</div>
           </div>
         );
@@ -62,7 +57,7 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      expect(screen.getByText('Test Company')).toBeInTheDocument();
+      expect(screen.getByText('https://test.supabase.co')).toBeInTheDocument();
       expect(screen.getByText('Supabase Available')).toBeInTheDocument();
     });
 
@@ -89,8 +84,6 @@ describe('AuthContext', () => {
           <div>
             <div data-testid="url">{config.supabaseUrl}</div>
             <div data-testid="key">{config.supabaseAnonKey}</div>
-            <div data-testid="redirect">{config.redirectAfterLogin}</div>
-            <div data-testid="oauth">{config.enableOAuth ? 'enabled' : 'disabled'}</div>
           </div>
         );
       };
@@ -103,8 +96,6 @@ describe('AuthContext', () => {
 
       expect(screen.getByTestId('url')).toHaveTextContent('https://test.supabase.co');
       expect(screen.getByTestId('key')).toHaveTextContent('test-key');
-      expect(screen.getByTestId('redirect')).toHaveTextContent('/dashboard');
-      expect(screen.getByTestId('oauth')).toHaveTextContent('enabled');
     });
   });
 
@@ -161,15 +152,15 @@ describe('AuthContext', () => {
   describe('嵌套Provider', () => {
     it('应该支持嵌套Provider并使用最近的context', () => {
       const innerConfig: AuthConfig = {
-        ...mockConfig,
-        companyName: 'Inner Company',
+        supabaseUrl: 'https://inner.supabase.co',
+        supabaseAnonKey: 'inner-key',
       };
 
       const mockSupabase2 = createMockSupabaseClient();
 
       const TestComponent = () => {
         const { config } = useAuthConfig();
-        return <div>{config.companyName}</div>;
+        return <div>{config.supabaseUrl}</div>;
       };
 
       render(
@@ -183,10 +174,8 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      const companies = screen.getAllByText(/Company/);
-      expect(companies).toHaveLength(2);
-      expect(screen.getByText('Test Company')).toBeInTheDocument();
-      expect(screen.getByText('Inner Company')).toBeInTheDocument();
+      expect(screen.getByText('https://test.supabase.co')).toBeInTheDocument();
+      expect(screen.getByText('https://inner.supabase.co')).toBeInTheDocument();
     });
   });
 });
