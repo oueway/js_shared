@@ -105,9 +105,8 @@ export function createRegisterPage() {
                 </Link>
               </div>
             )}
-            <div className="h-12 w-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-200 mb-6">
-              {logo}
-            </div>
+
+            {logo}
             <h2 className="text-2xl font-bold text-slate-900">
               {appName ? `Join ${appName}` : 'Create an account'}
             </h2>

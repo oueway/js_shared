@@ -65,9 +65,8 @@ export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
                 </Link>
               </div>
             )}
-            <div className="h-12 w-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-200 mb-6">
-              {logo}
-            </div>
+            
+            {logo}
             <h2 className="text-2xl font-bold text-slate-900">Reset your password</h2>
             <p className="text-slate-500 mt-2 text-sm">
               {appName ? `Enter your ${appName} email to receive a reset link` : "Enter your email and we'll send you a reset link"}
