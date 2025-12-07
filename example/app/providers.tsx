@@ -1,0 +1,37 @@
+'use client';
+
+import React from 'react';
+import { AuthProvider, AuthUIProvider } from '@oueway/js-shared/lib';
+import { useSupabaseClient } from '../lib/supabase-client';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const supabase = useSupabaseClient();
+
+  return (
+    <AuthProvider
+      config={{
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+        supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+      }}
+      supabase={supabase}
+    >
+      <AuthUIProvider
+        config={{
+          logo: 'JS',
+          appName: 'JS Shared Example',
+          enableOAuth: true,
+          oauthProviders: ['google', 'apple'],
+          redirectAfterLogin: '/dashboard',
+          redirectAfterRegister: '/dashboard',
+          forgotPasswordLink: '/auth/forgot-password',
+          registerLink: '/auth/register',
+          loginLink: '/auth/login',
+          homePage: '/',
+          authCallbackUrl: '/auth/callback',
+        }}
+      >
+        {children}
+      </AuthUIProvider>
+    </AuthProvider>
+  );
+}
