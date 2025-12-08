@@ -3,6 +3,7 @@
 import React from 'react';
 import { AuthProvider, AuthUIProvider } from '@oueway/js-shared/lib';
 import { useSupabaseClient } from '../lib/supabase-client';
+import { AppLogo } from './components/AppLogo';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const supabase = useSupabaseClient();
@@ -17,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <AuthUIProvider
         config={{
-          logo: 'JS',
+          logo: <AppLogo />,
           appName: 'JS Shared Example',
           enableOAuth: true,
           oauthProviders: ['google', 'apple'],

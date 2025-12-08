@@ -78,23 +78,43 @@ export function createLoginPage() {
 
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
           {/* Header */}
-          <div className="bg-white p-8 pb-0 text-center">
-            {homePage && (
-              <div className="mb-4 text-left">
-                <Link href={homePage} className="inline-flex items-center text-sm text-slate-500 hover:text-indigo-600 transition-colors">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <div className="bg-white p-8 pb-0">
+            <div className="flex items-start justify-between">
+              {homePage ? (
+                <Link
+                  href={homePage}
+                  className="inline-flex items-center text-sm text-slate-500 hover:text-indigo-600 transition-colors"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6" />
                   </svg>
-                  Back to Home
+                  Home
                 </Link>
+              ) : (
+                <span className="w-16" aria-hidden="true" />
+              )}
+
+              <div className="flex-1 flex justify-center">
+                {logo ? (
+                  typeof logo === 'string' ? (
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white text-lg font-bold">
+                      {logo}
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-3 text-left">{logo}</div>
+                  )
+                ) : null}
               </div>
-            )}
-            
-            {logo}
-            <h2 className="text-2xl font-bold text-slate-900">
-              {appName ? `Welcome to ${appName}` : 'Welcome back'}
-            </h2>
-            <p className="text-slate-500 mt-2 text-sm">Enter your credentials to access your account</p>
+
+              <span className="w-16" aria-hidden="true" />
+            </div>
+
+            <div className="mt-6 text-center">
+              <h2 className="text-2xl font-bold text-slate-900">
+                {appName ? `Welcome to ${appName}` : 'Welcome back'}
+              </h2>
+              <p className="text-slate-500 mt-2 text-sm">Enter your credentials to access your account</p>
+            </div>
           </div>
 
           {/* Form */}
