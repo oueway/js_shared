@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
+import { AuthHeader } from './AuthHeader';
 
 export function createLoginPage() {
   return function LoginPage() {
@@ -77,45 +78,12 @@ export function createLoginPage() {
         </div>
 
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-          {/* Header */}
-          <div className="bg-white p-8 pb-0">
-            <div className="flex items-start justify-between">
-              {homePage ? (
-                <Link
-                  href={homePage}
-                  className="inline-flex items-center text-sm text-slate-500 hover:text-indigo-600 transition-colors"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                  Home
-                </Link>
-              ) : (
-                <span className="w-16" aria-hidden="true" />
-              )}
-
-              <div className="flex-1 flex justify-center">
-                {logo ? (
-                  typeof logo === 'string' ? (
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white text-lg font-bold">
-                      {logo}
-                    </div>
-                  ) : (
-                    <div className="inline-flex items-center gap-3 text-left">{logo}</div>
-                  )
-                ) : null}
-              </div>
-
-              <span className="w-16" aria-hidden="true" />
-            </div>
-
-            <div className="mt-6 text-center">
-              <h2 className="text-2xl font-bold text-slate-900">
-                {appName ? `Welcome to ${appName}` : 'Welcome back'}
-              </h2>
-              <p className="text-slate-500 mt-2 text-sm">Enter your credentials to access your account</p>
-            </div>
-          </div>
+          <AuthHeader
+            homePage={homePage}
+            logo={logo}
+            title={appName ? `Welcome to ${appName}` : 'Welcome back'}
+            subtitle="Enter your credentials to access your account"
+          />
 
           {/* Form */}
           <div className="p-8">
