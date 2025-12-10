@@ -1,6 +1,6 @@
 {
   "name": "@oueway/js-shared",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Reusable authentication and dashboard components for Supabase-powered Next.js apps",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

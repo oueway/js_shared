@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle, Chrome, Apple, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { TextField } from '../../components/ui';
@@ -14,7 +13,7 @@ export function createLoginPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
     const {
-      logo = 'O',
+      logo,
       appName = '',
       enableOAuth = true,
       oauthProviders = [],
@@ -22,7 +21,7 @@ export function createLoginPage() {
       forgotPasswordLink = '',
       registerLink = '',
       authCallbackUrl,
-      homePage = '/',
+      homePage,
     } = config;
 
     const [email, setEmail] = useState('');
@@ -70,23 +69,24 @@ export function createLoginPage() {
     };
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-slate-50">
+      <div className="min-h-screen flex flex-col p-4 relative overflow-hidden bg-slate-50">
         {/* Background Decor */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
           <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-200/40 rounded-full blur-[80px]" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-          <AuthHeader
-            homePage={homePage}
-            logo={logo}
-            title={appName ? `Welcome to ${appName}` : 'Welcome back'}
-            subtitle="Enter your credentials to access your account"
-          />
+        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
 
-          {/* Form */}
-          <div className="p-8">
+        {/* Form centered */}
+        <div className="flex-1 flex items-center justify-center relative z-10">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="px-8 pt-8 pb-0 text-center">
+              <h2 className="text-2xl font-bold text-slate-700">{appName ? `Log in to ${appName}` : 'Log In'}</h2>
+            </div>
+
+            {/* Form */}
+            <div className="p-8">
             <form onSubmit={signInWithPassword} className="space-y-4">
               <TextField
                 label="Email"
@@ -94,7 +94,7 @@ export function createLoginPage() {
                 type="email"
                 name="email"
                 autoComplete="email"
-                placeholder="name@company.com"
+                placeholder="Input your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -106,7 +106,7 @@ export function createLoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 autoComplete="current-password"
-                placeholder="••••••••"
+                placeholder="Input your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -205,6 +205,7 @@ export function createLoginPage() {
                 </p>
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>

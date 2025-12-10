@@ -6,7 +6,7 @@ export function AppLogo() {
       </div>
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Example App</h1>
-        <p className="text-slate-500 text-sm">Test the auth pages locally</p>
+        <p className="text-slate-500 text-xs">Test the auth pages locally</p>
       </div>
     </div>
   );

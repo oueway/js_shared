@@ -27,8 +27,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
           forgotPasswordLink: '/auth/forgot-password',
           registerLink: '/auth/register',
           loginLink: '/auth/login',
-          homePage: '/',
           authCallbackUrl: '/auth/callback',
+          homePage: '/',
         }}
       >
         {children}

@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { Lock, Loader2, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
@@ -20,7 +18,7 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
   return function ResetPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
-    const { logo = 'O', appName, loginLink = '/login', homePage = '/' } = config;
+    const { logo, appName, loginLink, homePage } = config;
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -78,23 +76,24 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
     };
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-slate-50">
+      <div className="min-h-screen flex flex-col p-4 relative overflow-hidden bg-slate-50">
         {/* Background Decor */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
           <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-200/40 rounded-full blur-[80px]" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-          <AuthHeader
-            homePage={homePage}
-            logo={logo}
-            title="Set new password"
-            subtitle={appName ? `Enter your new ${appName} password` : 'Enter your new password below'}
-          />
+        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
 
-          {/* Form */}
-          <div className="p-8">
+        {/* Form centered */}
+        <div className="flex-1 flex items-center justify-center relative z-10">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="px-8 pt-8 pb-0 text-center">
+              <h2 className="text-2xl font-bold text-slate-700">Set new password</h2>
+            </div>
+
+            {/* Form */}
+            <div className="p-8">
             <form onSubmit={handleResetPassword} className="space-y-4">
               <TextField
                 label="New Password"
@@ -102,7 +101,7 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 autoComplete="new-password"
-                placeholder="••••••••"
+                placeholder="Input your new password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -123,7 +122,7 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
                 type={showConfirmPassword ? 'text' : 'password'}
                 name="confirm-password"
                 autoComplete="new-password"
-                placeholder="••••••••"
+                placeholder="Confirm your new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -170,6 +169,7 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     );
