@@ -44,7 +44,7 @@ export default function ProfileView({ session, supabase, showToast }: ProfileVie
             <Button onClick={handleUpdate} loading={loading}>Save Changes</Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
                 <User size={20} className="text-indigo-500" /> Personal Details
@@ -67,12 +67,12 @@ export default function ProfileView({ session, supabase, showToast }: ProfileVie
               </h3>
               <div className="bg-slate-50 rounded-lg p-4 border border-slate-200 text-sm space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">User ID</span>
-                  <span className="font-mono text-slate-700 text-xs">{session.user.id.slice(0, 18)}...</span>
+                  <span className="text-slate-500">Join Date</span>
+                  <span className="font-mono text-slate-700 text-xs">{new Date(session.user.created_at || Date.now()).toLocaleDateString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Last Sign In</span>
-                  <span className="text-slate-700">{new Date(session.user.last_sign_in_at || Date.now()).toLocaleDateString()}</span>
+                  <span className="font-mono text-slate-700 text-xs">{new Date(session.user.last_sign_in_at || Date.now()).toLocaleDateString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Provider</span>

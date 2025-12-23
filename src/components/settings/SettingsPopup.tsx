@@ -4,23 +4,31 @@ import React, { useState, useEffect } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { 
   User, 
-  Settings, 
   Loader2, 
   ShieldCheck, 
   CheckCircle,
   AlertCircle,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 import { Button } from '../ui';
 import ProfileView from './ProfileView';
 import SecurityView from './SecurityView';
-import PreferencesView from './PreferencesView';
+
+export interface SettingsTab {
+  id: string;
+  label: string;
+  icon: any;
+  component: React.ComponentType<any>;
+  description?: string;
+}
 
 export interface SettingsPopupProps {
   supabase: SupabaseClient;
   isOpen: boolean;
   onClose: () => void;
   onSignOut?: () => void;
+  additionalTabs?: SettingsTab[];
 }
 
 const Toast = ({ message, type, onClose }: { message?: string; type?: 'success' | 'error'; onClose: () => void }) => {
@@ -52,7 +60,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }: { icon: any; label:
   </button>
 );
 
-export function SettingsPopup({ supabase, isOpen, onClose, onSignOut }: SettingsPopupProps) {
+export function SettingsPopup({ supabase, isOpen, onClose, onSignOut, additionalTabs = [] }: SettingsPopupProps) {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState('profile');
@@ -142,12 +150,15 @@ export function SettingsPopup({ supabase, isOpen, onClose, onSignOut }: Settings
                   active={currentView === 'security'} 
                   onClick={() => setCurrentView('security')} 
                 />
-                <SidebarItem 
-                  icon={Settings} 
-                  label="Preferences" 
-                  active={currentView === 'settings'} 
-                  onClick={() => setCurrentView('settings')} 
-                />
+                {additionalTabs.map((tab) => (
+                  <SidebarItem 
+                    key={tab.id}
+                    icon={tab.icon} 
+                    label={tab.label} 
+                    active={currentView === tab.id} 
+                    onClick={() => setCurrentView(tab.id)} 
+                  />
+                ))}
               </nav>
 
               <div className="p-4 border-t border-slate-100">
@@ -177,7 +188,9 @@ export function SettingsPopup({ supabase, isOpen, onClose, onSignOut }: Settings
                   >
                     <option value="profile">My Profile</option>
                     <option value="security">Login &amp; Security</option>
-                    <option value="settings">Account Preferences</option>
+                    {additionalTabs.map((tab) => (
+                      <option key={tab.id} value={tab.id}>{tab.label}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -186,19 +199,25 @@ export function SettingsPopup({ supabase, isOpen, onClose, onSignOut }: Settings
                   <h1 className="text-2xl font-bold text-slate-900">
                     {currentView === 'profile' && 'My Profile'}
                     {currentView === 'security' && 'Login & Security'}
-                    {currentView === 'settings' && 'Account Preferences'}
+                    {additionalTabs.find(tab => tab.id === currentView)?.label}
                   </h1>
                   <p className="text-slate-500 mt-1">
                     {currentView === 'profile' && 'Manage your personal information and public profile.'}
                     {currentView === 'security' && 'Update your password and secure your account.'}
-                    {currentView === 'settings' && 'Manage your notifications and application settings.'}
+                    {additionalTabs.find(tab => tab.id === currentView)?.description}
                   </p>
                 </header>
 
                 {/* Views */}
                 {currentView === 'profile' && <ProfileView session={session} supabase={supabase} showToast={showToast} />}
                 {currentView === 'security' && <SecurityView session={session} supabase={supabase} showToast={showToast} />}
-                {currentView === 'settings' && <PreferencesView showToast={showToast} />}
+                {additionalTabs.map((tab) => {
+                  if (currentView === tab.id) {
+                    const Component = tab.component;
+                    return <Component key={tab.id} session={session} supabase={supabase} showToast={showToast} />;
+                  }
+                  return null;
+                })}
               </div>
             </main>
           </div>

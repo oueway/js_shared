@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Bell, Settings, Moon, Sun, Smartphone, Trash2 } from 'lucide-react';
-import { Button, Toggle } from '../ui';
+import { Button, Toggle } from '@oueway/js-shared';
 
 interface PreferencesViewProps {
   showToast: (message: string, type?: 'success' | 'error') => void;

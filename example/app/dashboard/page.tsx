@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSupabaseClient } from '../../lib/supabase-client';
 import { SettingsPopup } from '@oueway/js-shared/components';
-import { Settings, LogOut, User as UserIcon, LayoutDashboard, TrendingUp, Users, Activity } from 'lucide-react';
+import { Settings, Settings2, LogOut, User as UserIcon, LayoutDashboard, TrendingUp, Users, Activity } from 'lucide-react';
 import { AppLogo } from '../components/AppLogo';
+import PreferencesView from './PreferencesView';
 
 export default function DashboardPage() {
   const supabase = useSupabaseClient();
@@ -191,6 +192,15 @@ export default function DashboardPage() {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         onSignOut={handleSignOut}
+        additionalTabs={[
+          {
+            id: 'preferences',
+            label: 'Preferences',
+            icon: Settings2,
+            component: PreferencesView,
+            description: 'Manage your notifications and application settings.'
+          }
+        ]}
       />
     </div>
   );

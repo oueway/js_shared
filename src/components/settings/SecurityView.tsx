@@ -67,7 +67,7 @@ export default function SecurityView({ session, supabase, showToast }: SecurityV
             <p className="text-sm font-medium text-slate-900">Add an extra layer of security</p>
             <p className="text-sm text-slate-500 mt-1">Protect your account by requiring a code when you log in.</p>
           </div>
-          <Button loading={false} variant="secondary" className="shrink-0" onClick={() => showToast('2FA setup is just a UI demo', 'success')}>Enable 2FA</Button>
+          <Button disabled={true} loading={false} variant="secondary" className="shrink-0" onClick={() => showToast('2FA setup is just a UI demo', 'success')}>Enable 2FA</Button>
         </div>
       </div>
     </div>
