@@ -7,12 +7,13 @@ export interface AuthUIConfig {
   appName?: string;
   enableOAuth?: boolean;
   oauthProviders?: Array<'google' | 'apple'>;
-  redirectAfterLogin?: string;
-  redirectAfterRegister?: string;
-  forgotPasswordLink?: string;
-  registerLink?: string;
-  loginLink?: string;
-  authCallbackUrl?: string;
+  redirectAfterLogin: string;
+  redirectAfterRegister: string;
+  forgotPasswordLink: string;
+  registerLink: string;
+  loginLink: string;
+  authCallbackUrl: string;
+  resetPasswordLink: string;
   homePage?: string;
 }
 
@@ -46,6 +47,7 @@ export function useAuthUIConfig(): AuthUIConfig {
       registerLink: '/auth/register',
       loginLink: '/auth/login',
       authCallbackUrl: '/auth/callback',
+      resetPasswordLink: '/auth/reset-password',
       homePage: '/',
     };
   }

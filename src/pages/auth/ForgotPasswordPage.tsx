@@ -18,7 +18,7 @@ export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
   return function ForgotPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
-    const { logo, appName, loginLink, homePage } = config;
+    const { logo, appName, loginLink, homePage, resetPasswordLink } = config;
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
 
       try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: resetPasswordUrl || `${window.location.origin}/reset-password`,
+          redirectTo: resetPasswordUrl || resetPasswordLink,
         });
         if (error) throw error;
         setSuccess('Check your email for the password reset link!');
