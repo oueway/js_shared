@@ -1,12 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle, Chrome, Apple, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+
+const emailProviders: Record<string, string> = {
+  'gmail.com': 'https://mail.google.com',
+  'outlook.com': 'https://outlook.live.com',
+  'hotmail.com': 'https://outlook.live.com',
+  'live.com': 'https://outlook.live.com',
+  'yahoo.com': 'https://mail.yahoo.com',
+  'icloud.com': 'https://www.icloud.com/mail',
+  'qq.com': 'https://mail.qq.com',
+  '163.com': 'https://mail.163.com',
+  '126.com': 'https://mail.126.com',
+  'sina.com': 'https://mail.sina.com.cn',
+  'sohu.com': 'https://mail.sohu.com',
+  'protonmail.com': 'https://mail.proton.me',
+  'me.com': 'https://www.icloud.com/mail',
+  'mac.com': 'https://www.icloud.com/mail',
+};
+
+const getEmailLink = (email: string) => {
+  if (!email) return null;
+  const domain = email.split('@')[1]?.toLowerCase();
+  if (!domain) return null;
+  return emailProviders[domain] || `https://${domain}`;
+};
 
 export function createRegisterPage() {
   return function RegisterPage() {
@@ -17,12 +42,14 @@ export function createRegisterPage() {
       appName,
       enableOAuth = true,
       oauthProviders = ['google', 'apple'],
-      redirectAfterRegister = '/',
       loginLink = '/login',
       authCallbackUrl,
       homePage,
       legalLinks,
     } = config;
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -31,6 +58,15 @@ export function createRegisterPage() {
     const [authTypeLoading, setAuthTypeLoading] = useState<string | null>(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+      const successParam = searchParams?.get('success');
+      const emailParam = searchParams?.get('email');
+      if (successParam === 'true' && emailParam) {
+        setSuccess('Account created successfully! Check your email to confirm.');
+        setEmail(emailParam);
+      }
+    }, [searchParams]);
 
     const signUp = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -58,7 +94,7 @@ export function createRegisterPage() {
         }
 
         setSuccess('Account created successfully! Check your email to confirm.');
-        setTimeout(() => (window.location.href = redirectAfterRegister), 2000);
+        router.push(`?success=true&email=${encodeURIComponent(email)}`);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -98,6 +134,41 @@ export function createRegisterPage() {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <div className="p-8 text-center">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-in zoom-in duration-300">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800 mb-3">Registration Successful</h2>
+                <p className="text-slate-600 mb-8">
+                  We have sent a verification email to <span className="font-medium text-slate-900 block mt-1">{email}</span>
+                </p>
+
+                <div className="space-y-4">
+                  <a
+                    href={getEmailLink(email) || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center h-11 rounded-lg px-4 py-2.5 bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    Open {email.split('@')[1] ? email.split('@')[1] : 'Email'}
+                  </a>
+                  
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-4 text-sm text-amber-800 text-left flex gap-3">
+                     <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                     <p>Can't find the email? Please check your <strong>Spam</strong> or <strong>Junk</strong> folder.</p>
+                  </div>
+                </div>
+
+                 <div className="mt-8 pt-6 border-t border-slate-100">
+                    <Link href={loginLink} className="text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors">
+                      Back to Log In
+                    </Link>
+                 </div>
+              </div>
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">{appName ? `Sign up for ${appName}` : 'Sign up'}</h2>
             </div>
@@ -245,8 +316,10 @@ export function createRegisterPage() {
                 </p>
               </div>
             )}
+            </div>
+            </>
+            )}
           </div>
-        </div>
         </div>
       </div>
     );
