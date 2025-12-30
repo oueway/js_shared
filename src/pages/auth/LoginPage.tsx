@@ -22,6 +22,7 @@ export function createLoginPage() {
       registerLink = '',
       authCallbackUrl,
       homePage,
+      legalLinks,
     } = config;
 
     const [email, setEmail] = useState('');
@@ -148,7 +149,7 @@ export function createLoginPage() {
                 className="w-full h-11 text-base inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 shadow-lg shadow-indigo-500/30"
               >
                 {authTypeLoading === 'email' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Sign In
+                Log In
               </button>
             </form>
 
@@ -205,8 +206,26 @@ export function createLoginPage() {
                 </p>
               </div>
             )}
+
+            {legalLinks && legalLinks.length > 0 && (
+              <p className="mt-8 text-xs text-center text-slate-500">
+                By logging in, you agree to our{' '}
+                {legalLinks.map((link, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && (i === legalLinks.length - 1 ? ' and ' : ', ')}
+                    <Link
+                      href={link.href}
+                      className="underline hover:text-slate-700 transition-colors"
+                      target="_blank"
+                    >
+                      {link.label}
+                    </Link>
+                  </React.Fragment>
+                ))}.
+              </p>
+            )}
           </div>
-          </div>
+        </div>
         </div>
       </div>
     );

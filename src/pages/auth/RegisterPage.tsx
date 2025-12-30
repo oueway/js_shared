@@ -21,6 +21,7 @@ export function createRegisterPage() {
       loginLink = '/login',
       authCallbackUrl,
       homePage,
+      legalLinks,
     } = config;
 
     const [email, setEmail] = useState('');
@@ -171,6 +172,24 @@ export function createRegisterPage() {
                 {authTypeLoading === 'email' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign Up
               </button>
+
+              {legalLinks && legalLinks.length > 0 && (
+                <p className="mt-4 text-xs text-center text-slate-500">
+                  By signing up, you agree to our{' '}
+                  {legalLinks.map((link, i) => (
+                    <React.Fragment key={i}>
+                      {i > 0 && (i === legalLinks.length - 1 ? ' and ' : ', ')}
+                      <Link
+                        href={link.href}
+                        className="underline hover:text-slate-700 transition-colors"
+                        target="_blank"
+                      >
+                        {link.label}
+                      </Link>
+                    </React.Fragment>
+                  ))}.
+                </p>
+              )}
             </form>
 
             {enableOAuth && oauthProviders.length > 0 && (
