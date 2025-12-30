@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Loader2, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { EmailVerificationSuccess } from './EmailVerificationSuccess';
 
 export function createForgotPasswordPage() {
   return function ForgotPasswordPage() {
@@ -14,10 +16,22 @@ export function createForgotPasswordPage() {
     const config = useAuthUIConfig();
     const { logo, appName, loginLink, homePage, resetPasswordLink } = config;
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+      const successParam = searchParams?.get('success');
+      const emailParam = searchParams?.get('email');
+      if (successParam === 'true' && emailParam) {
+        setSuccess('Check your email for the password reset link!');
+        setEmail(emailParam);
+      }
+    }, [searchParams]);
 
     const handleResetPassword = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -31,6 +45,7 @@ export function createForgotPasswordPage() {
         });
         if (error) throw error;
         setSuccess('Check your email for the password reset link!');
+        router.push(`?success=true&email=${encodeURIComponent(email)}`);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -51,6 +66,15 @@ export function createForgotPasswordPage() {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <EmailVerificationSuccess
+                email={email}
+                title="Check Your Email"
+                message={`If your email is registered with us, ${email} will receive a password reset link shortly.`}
+                loginLink={loginLink}
+              />
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">Reset your password</h2>
               <p className="text-slate-500 mt-2 text-sm">If your email is registered, we'll send you a reset link</p>
@@ -78,13 +102,6 @@ export function createForgotPasswordPage() {
                 </div>
               )}
 
-              {success && (
-                <div className="p-3 bg-green-50 text-green-600 text-sm rounded-lg flex items-start gap-2">
-                  <CheckCircle size={16} className="mt-0.5 shrink-0" />
-                  <span>{success}</span>
-                </div>
-              )}
-
               <button
                 type="submit"
                 disabled={loading}
@@ -103,8 +120,10 @@ export function createForgotPasswordPage() {
                 </Link>
               </div>
             )}
+            </div>
+            </>
+            )}
           </div>
-        </div>
         </div>
       </div>
     );
