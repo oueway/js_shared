@@ -1,14 +1,37 @@
 import { NextResponse } from 'next/server';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get('code');
+  const next = searchParams.get('next') ?? '/dashboard';
 
   if (code) {
-    // Redirect to dashboard after successful OAuth
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    const cookieStore = await cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            cookieStore.set({ name, value, ...options });
+          },
+          remove(name: string, options: CookieOptions) {
+            cookieStore.delete({ name, ...options });
+          },
+        },
+      }
+    );
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
-  // Redirect to login if no code
-  return NextResponse.redirect(new URL('/auth/login', request.url));
+  // Return the user to an error page with instructions
+  return NextResponse.redirect(`${origin}/auth/login?error=AuthCodeError`);
 }

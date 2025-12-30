@@ -7,14 +7,9 @@ import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { ResetPasswordSuccess } from './ResetPasswordSuccess';
 
-export interface ResetPasswordPageProps {
-  redirectAfterReset?: string;
-}
-
-export function createResetPasswordPage(props?: ResetPasswordPageProps) {
-  const { redirectAfterReset = '/login' } = props || {};
-
+export function createResetPasswordPage() {
   return function ResetPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
@@ -66,8 +61,8 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
 
         setSuccess('Password updated successfully! Redirecting to login...');
         setTimeout(() => {
-          window.location.href = redirectAfterReset;
-        }, 2000);
+          window.location.href = loginLink;
+        }, 2500);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -88,6 +83,10 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <ResetPasswordSuccess />
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">Set new password</h2>
             </div>
@@ -168,8 +167,10 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
                 </a>
               </div>
             )}
+            </div>
+            </>
+            )}
           </div>
-        </div>
         </div>
       </div>
     );

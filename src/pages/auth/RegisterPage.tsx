@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle, Chrome, Apple, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { EmailVerificationSuccess } from './EmailVerificationSuccess';
 
 export function createRegisterPage() {
   return function RegisterPage() {
@@ -17,11 +19,14 @@ export function createRegisterPage() {
       appName,
       enableOAuth = true,
       oauthProviders = ['google', 'apple'],
-      redirectAfterRegister = '/',
       loginLink = '/login',
       authCallbackUrl,
       homePage,
+      legalLinks,
     } = config;
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,6 +35,15 @@ export function createRegisterPage() {
     const [authTypeLoading, setAuthTypeLoading] = useState<string | null>(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+      const successParam = searchParams?.get('success');
+      const emailParam = searchParams?.get('email');
+      if (successParam === 'true' && emailParam) {
+        setSuccess('Account created successfully! Check your email to confirm.');
+        setEmail(emailParam);
+      }
+    }, [searchParams]);
 
     const signUp = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -57,7 +71,7 @@ export function createRegisterPage() {
         }
 
         setSuccess('Account created successfully! Check your email to confirm.');
-        setTimeout(() => (window.location.href = redirectAfterRegister), 2000);
+        router.push(`?success=true&email=${encodeURIComponent(email)}`);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -97,6 +111,14 @@ export function createRegisterPage() {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <EmailVerificationSuccess
+                email={email}
+                title="Registration Successful"
+                loginLink={loginLink}
+              />
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">{appName ? `Sign up for ${appName}` : 'Sign up'}</h2>
             </div>
@@ -171,6 +193,24 @@ export function createRegisterPage() {
                 {authTypeLoading === 'email' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign Up
               </button>
+
+              {legalLinks && legalLinks.length > 0 && (
+                <p className="mt-4 text-xs text-center text-slate-500">
+                  By signing up, you agree to our{' '}
+                  {legalLinks.map((link, i) => (
+                    <React.Fragment key={i}>
+                      {i > 0 && (i === legalLinks.length - 1 ? ' and ' : ', ')}
+                      <Link
+                        href={link.href}
+                        className="underline hover:text-slate-700 transition-colors"
+                        target="_blank"
+                      >
+                        {link.label}
+                      </Link>
+                    </React.Fragment>
+                  ))}.
+                </p>
+              )}
             </form>
 
             {enableOAuth && oauthProviders.length > 0 && (
@@ -226,8 +266,10 @@ export function createRegisterPage() {
                 </p>
               </div>
             )}
+            </div>
+            </>
+            )}
           </div>
-        </div>
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { LoginSuccess } from './LoginSuccess';
 
 export function createLoginPage() {
   return function LoginPage() {
@@ -22,6 +23,7 @@ export function createLoginPage() {
       registerLink = '',
       authCallbackUrl,
       homePage,
+      legalLinks,
     } = config;
 
     const [email, setEmail] = useState('');
@@ -41,7 +43,7 @@ export function createLoginPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         setSuccess('Welcome back!');
-        setTimeout(() => (window.location.href = redirectAfterLogin), 1000);
+        setTimeout(() => (window.location.href = redirectAfterLogin), 1500);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -81,6 +83,10 @@ export function createLoginPage() {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <LoginSuccess email={email} />
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">{appName ? `Log in to ${appName}` : 'Log In'}</h2>
             </div>
@@ -148,7 +154,7 @@ export function createLoginPage() {
                 className="w-full h-11 text-base inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 shadow-lg shadow-indigo-500/30"
               >
                 {authTypeLoading === 'email' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Sign In
+                Log In
               </button>
             </form>
 
@@ -205,7 +211,27 @@ export function createLoginPage() {
                 </p>
               </div>
             )}
-          </div>
+
+            {legalLinks && legalLinks.length > 0 && (
+              <p className="mt-8 text-xs text-center text-slate-500">
+                By logging in, you agree to our{' '}
+                {legalLinks.map((link, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && (i === legalLinks.length - 1 ? ' and ' : ', ')}
+                    <Link
+                      href={link.href}
+                      className="underline hover:text-slate-700 transition-colors"
+                      target="_blank"
+                    >
+                      {link.label}
+                    </Link>
+                  </React.Fragment>
+                ))}.
+              </p>
+            )}
+            </div>
+            </>
+            )}
           </div>
         </div>
       </div>

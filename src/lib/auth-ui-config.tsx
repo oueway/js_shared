@@ -15,6 +15,10 @@ export interface AuthUIConfig {
   authCallbackUrl: string;
   resetPasswordLink: string;
   homePage?: string;
+  legalLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
 }
 
 const AuthUIConfigContext = createContext<AuthUIConfig | null>(null);

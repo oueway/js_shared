@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <AuthUIProvider
         config={{
-          logo: <AppLogo />,
+          logo: <AppLogo /> as any,
           appName: 'JS Shared Example',
           enableOAuth: true,
           oauthProviders: ['google', 'apple'],
@@ -30,9 +30,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
           authCallbackUrl: '/auth/callback',
           resetPasswordLink: '/auth/reset-password',
           homePage: '/',
+          legalLinks: [
+            { label: 'Terms', href: '/terms' },
+            { label: 'Privacy Policy', href: '/privacy' },
+          ],
         }}
       >
-        {children}
+        {children as any}
       </AuthUIProvider>
     </AuthProvider>
   );
