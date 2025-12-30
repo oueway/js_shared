@@ -7,6 +7,7 @@ import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { LoginSuccess } from './LoginSuccess';
 
 export function createLoginPage() {
   return function LoginPage() {
@@ -42,7 +43,7 @@ export function createLoginPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         setSuccess('Welcome back!');
-        setTimeout(() => (window.location.href = redirectAfterLogin), 1000);
+        setTimeout(() => (window.location.href = redirectAfterLogin), 1500);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -82,6 +83,10 @@ export function createLoginPage() {
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            {success ? (
+              <LoginSuccess email={email} />
+            ) : (
+              <>
             <div className="px-8 pt-8 pb-0 text-center">
               <h2 className="text-2xl font-bold text-slate-700">{appName ? `Log in to ${appName}` : 'Log In'}</h2>
             </div>
@@ -224,8 +229,10 @@ export function createLoginPage() {
                 ))}.
               </p>
             )}
+            </div>
+            </>
+            )}
           </div>
-        </div>
         </div>
       </div>
     );
