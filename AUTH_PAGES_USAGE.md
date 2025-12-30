@@ -94,16 +94,12 @@ export default ResetPasswordPage;
 
 ```tsx
 // 重置密码后跳转到特定页面
-const ResetPasswordPage = createResetPasswordPage({
-  redirectAfterReset: '/welcome',
-});
+const ResetPasswordPage = createResetPasswordPage();
 ```
 
 ```tsx
 // 自定义密码重置链接
-const ForgotPasswordPage = createForgotPasswordPage({
-  resetPasswordUrl: 'https://myapp.com/reset-password',
-});
+const ForgotPasswordPage = createForgotPasswordPage();
 ```
 
 ## 🎨 AuthUIConfig 配置项

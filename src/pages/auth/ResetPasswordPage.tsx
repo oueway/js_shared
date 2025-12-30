@@ -8,13 +8,7 @@ import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
 
-export interface ResetPasswordPageProps {
-  redirectAfterReset?: string;
-}
-
-export function createResetPasswordPage(props?: ResetPasswordPageProps) {
-  const { redirectAfterReset = '/login' } = props || {};
-
+export function createResetPasswordPage() {
   return function ResetPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
@@ -66,7 +60,7 @@ export function createResetPasswordPage(props?: ResetPasswordPageProps) {
 
         setSuccess('Password updated successfully! Redirecting to login...');
         setTimeout(() => {
-          window.location.href = redirectAfterReset;
+          window.location.href = loginLink;
         }, 2000);
       } catch (err: any) {
         setError(err.message);

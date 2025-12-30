@@ -8,13 +8,7 @@ import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
 
-export interface ForgotPasswordPageProps {
-  resetPasswordUrl?: string;
-}
-
-export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
-  const { resetPasswordUrl } = props || {};
-
+export function createForgotPasswordPage() {
   return function ForgotPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
@@ -33,7 +27,7 @@ export function createForgotPasswordPage(props?: ForgotPasswordPageProps) {
 
       try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: resetPasswordUrl || resetPasswordLink,
+          redirectTo: resetPasswordLink,
         });
         if (error) throw error;
         setSuccess('Check your email for the password reset link!');
