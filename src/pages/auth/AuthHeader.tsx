@@ -1,12 +1,12 @@
 import React from 'react';
 
 export interface AuthHeaderProps {
-  homePage?: string;
+  homePageUrl?: string;
   logo?: React.ReactNode | string;
   appName?: string;
 }
 
-export function AuthHeader({ homePage, logo, appName }: AuthHeaderProps) {
+export function AuthHeader({ homePageUrl, logo, appName }: AuthHeaderProps) {
   // 如果 logo 是字符串，则渲染为带有样式的元素
   let logoElement = logo;
   if (typeof logo === 'string') {
@@ -30,7 +30,7 @@ export function AuthHeader({ homePage, logo, appName }: AuthHeaderProps) {
             <div className="flex-1 flex justify-start">
               {logoElement ? (
                 <div 
-                  onClick={homePage ? (() => window.location.href = homePage) : undefined} 
+                  onClick={homePageUrl ? (() => window.location.href = homePageUrl) : undefined} 
                   className="inline-flex items-center gap-3 text-left"
                 >
                   {logoElement}

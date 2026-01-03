@@ -14,7 +14,7 @@ export interface AuthUIConfig {
   loginLink: string;
   authCallbackUrl: string;
   resetPasswordLink: string;
-  homePage?: string;
+  homePageUrl?: string;
   legalLinks?: Array<{
     label: string;
     href: string;
@@ -37,23 +37,35 @@ export function AuthUIProvider({ children, config }: AuthUIProviderProps) {
 }
 
 export function useAuthUIConfig(): AuthUIConfig {
-  const context = useContext(AuthUIConfigContext);
-  if (!context) {
-    // 返回默认配置而不是抛出错误
-    return {
-      logo: 'O',
-      appName: 'Unnamed App',
-      enableOAuth: true,
-      oauthProviders: [],
-      redirectAfterLogin: '/app',
-      redirectAfterRegister: '/auth/login',
-      forgotPasswordLink: '/auth/forgot-password',
-      registerLink: '/auth/register',
-      loginLink: '/auth/login',
-      authCallbackUrl: '/auth/callback',
-      resetPasswordLink: '/auth/reset-password',
-      homePage: '/',
-    };
-  }
-  return context;
+  const context = useContext(AuthUIConfigContext) || {
+    logo: 'O',
+    appName: 'Unnamed App',
+    enableOAuth: true,
+    oauthProviders: [],
+    redirectAfterLogin: '/app',
+    redirectAfterRegister: '/auth/login',
+    forgotPasswordLink: '/auth/forgot-password',
+    registerLink: '/auth/register',
+    loginLink: '/auth/login',
+    authCallbackUrl: '/auth/callback',
+    resetPasswordLink: '/auth/reset-password',
+  };
+
+  // Helper to ensure URLs passed to Supabase are absolute
+  // This is critical for redirects to work correctly across different environments (localhost vs prod)
+  const toAbsoluteUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}${url.startsWith('/') ? '' : '/'}${url}`;
+    }
+    return url;
+  };
+
+  return {
+    ...context,
+    authCallbackUrl: toAbsoluteUrl(context.authCallbackUrl),
+    resetPasswordLink: toAbsoluteUrl(context.resetPasswordLink),
+    homePageUrl: context.homePageUrl ? toAbsoluteUrl(context.homePageUrl) : undefined,
+  };
 }

@@ -29,7 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           loginLink: '/auth/login',
           authCallbackUrl: '/auth/callback',
           resetPasswordLink: '/auth/reset-password',
-          homePage: '/',
+          homePageUrl: '/',
           legalLinks: [
             { label: 'Terms', href: '/terms' },
             { label: 'Privacy Policy', href: '/privacy' },

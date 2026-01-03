@@ -22,7 +22,7 @@ export function createLoginPage() {
       forgotPasswordLink = '',
       registerLink = '',
       authCallbackUrl,
-      homePage,
+      homePageUrl,
       legalLinks,
     } = config;
 
@@ -78,7 +78,7 @@ export function createLoginPage() {
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
+        <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">

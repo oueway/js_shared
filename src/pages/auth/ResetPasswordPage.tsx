@@ -13,7 +13,7 @@ export function createResetPasswordPage() {
   return function ResetPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
-    const { logo, appName, loginLink, homePage } = config;
+    const { logo, appName, loginLink, homePageUrl } = config;
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -78,7 +78,7 @@ export function createResetPasswordPage() {
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
+        <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
