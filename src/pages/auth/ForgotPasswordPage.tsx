@@ -14,7 +14,7 @@ export function createForgotPasswordPage() {
   return function ForgotPasswordPage() {
     const supabase = useSupabase();
     const config = useAuthUIConfig();
-    const { logo, appName, loginLink, homePage, resetPasswordLink } = config;
+    const { logo, appName, loginLink, homePageUrl, resetPasswordLink } = config;
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -40,6 +40,8 @@ export function createForgotPasswordPage() {
       setLoading(true);
 
       try {
+        console.log('[ForgotPassword] Sending password reset with redirect:', resetPasswordLink);
+
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: resetPasswordLink,
         });
@@ -61,7 +63,7 @@ export function createForgotPasswordPage() {
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
+        <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">

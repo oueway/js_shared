@@ -21,7 +21,7 @@ export function createRegisterPage() {
       oauthProviders = ['google', 'apple'],
       loginLink = '/login',
       authCallbackUrl,
-      homePage,
+      homePageUrl,
       legalLinks,
     } = config;
 
@@ -56,7 +56,7 @@ export function createRegisterPage() {
           email,
           password,
           options: {
-            emailRedirectTo: authCallbackUrl || (typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined),
+            emailRedirectTo: authCallbackUrl || `${window.location.origin}/auth/callback`,
             data: {
               full_name: fullName,
             },
@@ -106,7 +106,7 @@ export function createRegisterPage() {
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
         </div>
 
-        <AuthHeader homePage={homePage} logo={logo} appName={appName} />
+        <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
         <div className="flex-1 flex items-center justify-center relative z-10">
