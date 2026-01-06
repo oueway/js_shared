@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Lint
-        run: pnpm lint
+      - name: Package Lint
+        run: 
+         - pnpm lint
+      
+      - name: Example App Lint
+        run: 
+         - cd example
+         - pnpm lint
 

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { useSupabaseClient } from '../../lib/supabase-client';
 import { SettingsPopup } from '@oueway/js-shared/components';
 import { Settings, Settings2, LogOut, User as UserIcon, LayoutDashboard, TrendingUp, Users, Activity } from 'lucide-react';
@@ -9,8 +11,9 @@ import PreferencesView from './PreferencesView';
 
 export default function DashboardPage() {
   const supabase = useSupabaseClient();
+  const router = useRouter();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,16 +25,22 @@ export default function DashboardPage() {
 
     fetchUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(session?.user || null);
     });
 
     return () => subscription.unsubscribe();
   }, [supabase]);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login');
+    }
+  }, [user, loading, router]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    window.location.href = '/';
+    router.push('/');
   };
 
   if (loading) {
@@ -43,7 +52,6 @@ export default function DashboardPage() {
   }
 
   if (!user) {
-    window.location.href = '/auth/login';
     return null;
   }
 
@@ -90,7 +98,7 @@ export default function DashboardPage() {
             Welcome back, {user.user_metadata?.full_name?.split(' ')[0] || 'User'}!
           </h1>
           <p className="mt-2 text-slate-600">
-            Here's what's happening with your account today.
+            Here&apos;s what&apos;s happening with your account today.
           </p>
         </div>
 
