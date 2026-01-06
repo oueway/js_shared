@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { User, Camera, LayoutDashboard } from 'lucide-react';
 import { Button, TextField } from '../ui';
 
 interface ProfileViewProps {
-  session: any;
+  session: Session;
   supabase: SupabaseClient;
   showToast: (message: string, type?: 'success' | 'error') => void;
 }

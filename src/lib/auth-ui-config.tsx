@@ -63,7 +63,7 @@ export function useAuthUIConfig(): AuthUIConfig {
   let searchParams = null;
   try {
     searchParams = useSearchParams();
-  } catch (e) {
+  } catch {
     // Ignore if not in a valid context
   }
   

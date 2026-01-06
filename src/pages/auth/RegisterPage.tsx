@@ -82,8 +82,12 @@ export function createRegisterPage() {
 
         setSuccess('Account created successfully! Check your email to confirm.');
         router.push(`?success=true&email=${encodeURIComponent(email)}`);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setAuthTypeLoading(null);
       }
@@ -101,8 +105,12 @@ export function createRegisterPage() {
           },
         });
         if (error) throw error;
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setAuthTypeLoading(null);
       }

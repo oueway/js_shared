@@ -33,7 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: React.ComponentType<any>;
+  icon?: React.ElementType;
   error?: string;
   rightElement?: React.ReactNode;
   labelRight?: React.ReactNode;

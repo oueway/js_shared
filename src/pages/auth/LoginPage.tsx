@@ -59,8 +59,12 @@ export function createLoginPage() {
         if (error) throw error;
         setSuccess('Welcome back!');
         setTimeout(() => (window.location.href = redirectAfterLogin), 1500);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setAuthTypeLoading(null);
       }
@@ -78,8 +82,12 @@ export function createLoginPage() {
           },
         });
         if (error) throw error;
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setAuthTypeLoading(null);
       }
