@@ -99,6 +99,6 @@ export function useAuthUIConfig(): AuthUIConfig {
     forgotPasswordLink: appendAppId(context.forgotPasswordLink),
     authCallbackUrl: appendAppId(toAbsoluteUrl(context.authCallbackUrl)),
     resetPasswordLink: appendAppId(toAbsoluteUrl(context.resetPasswordLink)),
-    homePageUrl: context.homePageUrl ? appendAppId(toAbsoluteUrl(context.homePageUrl)) : undefined,
+    homePageUrl: context.homePageUrl ? appendAppId(context.homePageUrl) : undefined,
   };
 }

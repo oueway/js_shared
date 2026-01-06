@@ -110,17 +110,11 @@ export function createRegisterPage() {
 
     return (
       <div className="min-h-screen flex flex-col p-4 relative overflow-hidden bg-slate-50">
-        {/* Background Decor */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-          <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-200/40 rounded-full blur-[80px]" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
-        </div>
-
         <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
-        <div className="flex-1 flex items-center justify-center relative z-10">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="flex-1 flex items-center justify-center relative">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-10">
             {success ? (
               <EmailVerificationSuccess
                 email={email}

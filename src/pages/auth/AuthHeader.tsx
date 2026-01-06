@@ -23,7 +23,7 @@ export function AuthHeader({ homePageUrl, logo, appName }: AuthHeaderProps) {
   }
 
   return (
-    <div className="absolute top-0 left-0 w-full p-4 z-0">
+    <div className="absolute top-0 left-0 w-full p-4 z-5">
       <div className="w-full max-w-4xl mx-auto">
         <div className="pl-8 pr-8 pt-0 pb-2">
           <div className="flex items-start justify-between">
@@ -31,7 +31,7 @@ export function AuthHeader({ homePageUrl, logo, appName }: AuthHeaderProps) {
               {logoElement ? (
                 <div 
                   onClick={homePageUrl ? (() => window.location.href = homePageUrl) : undefined} 
-                  className="inline-flex items-center gap-3 text-left"
+                  className={`inline-flex items-center gap-3 text-left ${homePageUrl ? 'cursor-pointer' : ''}`}
                 >
                   {logoElement}
                 </div>
