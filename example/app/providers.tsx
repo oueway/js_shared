@@ -20,6 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         config={{
           logo: <AppLogo /> as any,
           appName: 'JS Shared Example',
+          apps: {
+            crm: 'Customer System',
+            shop: 'E-Commerce App',
+          },
           enableOAuth: true,
           oauthProviders: ['google', 'apple'],
           redirectAfterLogin: '/dashboard',

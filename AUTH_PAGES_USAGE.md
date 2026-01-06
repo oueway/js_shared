@@ -115,6 +115,7 @@ const ForgotPasswordPage = createForgotPasswordPage();
 |--------|------|--------|------|
 | `logo` | `React.ReactNode` | `'O'` | Logo（可以是文本、图片或任意组件） |
 | `appName` | `string` | `undefined` | 应用名称 |
+| `apps` | `Record<string, string>` | `{}` | 多应用名称映射表 |
 | `enableOAuth` | `boolean` | `true` | 是否启用 OAuth |
 | `oauthProviders` | `Array<'google' \| 'apple'>` | `['google', 'apple']` | OAuth 提供商 |
 | `redirectAfterLogin` | `string` | `'/dashboard'` | 登录后跳转 |
@@ -124,6 +125,42 @@ const ForgotPasswordPage = createForgotPasswordPage();
 | `loginLink` | `string` | `'/login'` | 登录链接 |
 | `authCallbackUrl` | `string` | `undefined` | OAuth 回调 URL |
 | `security` | `object` | `undefined` | 安全配置 (Captcha) |
+
+## 🏢 多应用支持 (Multi-App Support)
+
+适用于**中央认证服务 (CAS)** 场景。通过 URL 参数 `appId` 动态改变认证页面的应用名称，并在用户认证流程中保持该上下文。
+
+### 1. 配置应用字典
+
+在 `AuthUIProvider` 中定义 `apps` 映射表：
+
+```tsx
+<AuthUIProvider
+  config={{
+    appName: 'Main Platform', // 默认名称
+    apps: {
+      crm: 'Customer Relationship Management',
+      shop: 'Online Store',
+      admin: 'Admin Console'
+    },
+    // ...其他配置
+  }}
+>
+```
+
+### 2. 使用方法
+
+只需在认证页面的 URL 中携带 `appId` 参数：
+
+- `/auth/login?appId=crm` -> 显示 "Log in to **Customer Relationship Management**"
+- `/auth/login?appId=shop` -> 显示 "Log in to **Online Store**"
+
+### 3. 自动流转
+
+系统会自动处理参数保持，无需额外代码：
+1. 用户访问 `/auth/login?appId=crm`
+2. 点击 "Sign up" -> 自动跳转到 `/auth/register?appId=crm`
+3. 注册成功 -> 跳转回 `/dashboard` (可在回调处理中读取 appId 进行进一步分发)
 
 ## 🛡️ 安全配置 (Captcha)
 

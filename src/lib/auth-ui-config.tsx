@@ -1,10 +1,12 @@
 'use client';
 
 import React, { createContext, useContext } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export interface AuthUIConfig {
   logo?: React.ReactNode;
   appName?: string;
+  apps?: Record<string, string>;
   enableOAuth?: boolean;
   oauthProviders?: Array<'google' | 'apple'>;
   redirectAfterLogin: string;
@@ -46,6 +48,7 @@ export function useAuthUIConfig(): AuthUIConfig {
   const context = useContext(AuthUIConfigContext) || {
     logo: 'O',
     appName: 'Unnamed App',
+    apps: {},
     enableOAuth: true,
     oauthProviders: [],
     redirectAfterLogin: '/app',
@@ -55,6 +58,26 @@ export function useAuthUIConfig(): AuthUIConfig {
     loginLink: '/auth/login',
     authCallbackUrl: '/auth/callback',
     resetPasswordLink: '/auth/reset-password',
+  };
+
+  let searchParams = null;
+  try {
+    searchParams = useSearchParams();
+  } catch (e) {
+    // Ignore if not in a valid context
+  }
+  
+  const appId = searchParams?.get('appId');
+
+  // Determine the effective app name
+  const effectiveAppName = (appId && context.apps?.[appId]) || context.appName;
+
+  // Helper to append appId to URLs to maintain context during navigation
+  const appendAppId = (url: string) => {
+    if (!url || !appId) return url;
+    if (url.includes('appId=')) return url;
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}appId=${encodeURIComponent(appId)}`;
   };
 
   // Helper to ensure URLs passed to Supabase are absolute
@@ -70,8 +93,12 @@ export function useAuthUIConfig(): AuthUIConfig {
 
   return {
     ...context,
-    authCallbackUrl: toAbsoluteUrl(context.authCallbackUrl),
-    resetPasswordLink: toAbsoluteUrl(context.resetPasswordLink),
-    homePageUrl: context.homePageUrl ? toAbsoluteUrl(context.homePageUrl) : undefined,
+    appName: effectiveAppName,
+    loginLink: appendAppId(context.loginLink),
+    registerLink: appendAppId(context.registerLink),
+    forgotPasswordLink: appendAppId(context.forgotPasswordLink),
+    authCallbackUrl: appendAppId(toAbsoluteUrl(context.authCallbackUrl)),
+    resetPasswordLink: appendAppId(toAbsoluteUrl(context.resetPasswordLink)),
+    homePageUrl: context.homePageUrl ? appendAppId(toAbsoluteUrl(context.homePageUrl)) : undefined,
   };
 }
