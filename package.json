@@ -57,5 +57,8 @@
   "files": [
     "dist",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "@marsidev/react-turnstile": "^1.4.1"
+  }
 }

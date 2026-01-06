@@ -8,6 +8,7 @@ import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { AuthCaptcha } from './AuthCaptcha';
 import { EmailVerificationSuccess } from './EmailVerificationSuccess';
 
 export function createRegisterPage() {
@@ -23,6 +24,7 @@ export function createRegisterPage() {
       authCallbackUrl,
       homePageUrl,
       legalLinks,
+      security,
     } = config;
 
     const router = useRouter();
@@ -35,6 +37,7 @@ export function createRegisterPage() {
     const [authTypeLoading, setAuthTypeLoading] = useState<string | null>(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     useEffect(() => {
       const successParam = searchParams?.get('success');
@@ -50,6 +53,12 @@ export function createRegisterPage() {
       setError('');
       setSuccess('');
       setAuthTypeLoading('email');
+      
+      if (security?.captcha?.siteKey && !captchaToken) {
+        setError('Please complete the security check.');
+        setAuthTypeLoading(null);
+        return;
+      }
 
       try {
         const { data, error } = await supabase.auth.signUp({
@@ -57,6 +66,7 @@ export function createRegisterPage() {
           password,
           options: {
             emailRedirectTo: authCallbackUrl || `${window.location.origin}/auth/callback`,
+            captchaToken: captchaToken || undefined,
             data: {
               full_name: fullName,
             },
@@ -184,6 +194,8 @@ export function createRegisterPage() {
                   <span>{success}</span>
                 </div>
               )}
+
+              <AuthCaptcha onVerify={setCaptchaToken} />
 
               <button
                 type="submit"

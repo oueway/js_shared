@@ -43,6 +43,13 @@ export default function RootLayout({ children }) {
               registerLink: '/register',
               loginLink: '/login',
               authCallbackUrl: '/auth/callback',
+              // 🛡️ 安全配置 (可选)
+              security: {
+                captcha: {
+                  provider: 'turnstile',
+                  siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
+                },
+              },
             }}
           >
             {children}
@@ -116,6 +123,36 @@ const ForgotPasswordPage = createForgotPasswordPage();
 | `registerLink` | `string` | `'/register'` | 注册链接 |
 | `loginLink` | `string` | `'/login'` | 登录链接 |
 | `authCallbackUrl` | `string` | `undefined` | OAuth 回调 URL |
+| `security` | `object` | `undefined` | 安全配置 (Captcha) |
+
+## 🛡️ 安全配置 (Captcha)
+
+支持集成 Cloudflare Turnstile 进行防机器验证。
+
+### 1. 安装依赖
+如果你使用了安全配置，请确保在项目中安装了 `react-turnstile`：
+```bash
+pnpm add @marsidev/react-turnstile
+```
+
+### 2. 启用配置
+
+一旦在 `AuthUIConfig` 中配置了 `siteKey`，以下页面将自动启用验证码检查：
+- 注册页 (Register)
+- 登录页 (Login)
+- 忘记密码页 (Forgot Password)
+
+```tsx
+security: {
+  captcha: {
+    provider: 'turnstile',
+    siteKey: 'YOUR_CLOUDFLARE_TURNSTILE_SITE_KEY',
+  },
+},
+```
+
+### 3. Supabase 配置
+确保你在 Supabase Dashboard 中也启用了 Cloudflare Turnstile 并配置了相应的 Secret Key。
 
 ## 🔄 Before vs After
 

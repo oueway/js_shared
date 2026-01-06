@@ -30,6 +30,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
           authCallbackUrl: '/auth/callback',
           resetPasswordLink: '/auth/reset-password',
           homePageUrl: '/',
+          security: {
+            captcha: {
+              provider: 'turnstile',
+              siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
+            },
+          },
           legalLinks: [
             { label: 'Terms', href: '/terms' },
             { label: 'Privacy Policy', href: '/privacy' },

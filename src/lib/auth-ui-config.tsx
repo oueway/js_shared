@@ -19,6 +19,12 @@ export interface AuthUIConfig {
     label: string;
     href: string;
   }>;
+  security?: {
+    captcha?: {
+      provider: 'turnstile';
+      siteKey: string;
+    };
+  };
 }
 
 const AuthUIConfigContext = createContext<AuthUIConfig | null>(null);
