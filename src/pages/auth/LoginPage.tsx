@@ -7,6 +7,7 @@ import { TextField } from '../../components/ui';
 import { useAuthUIConfig } from '../../lib/auth-ui-config';
 import { useSupabase } from '../../lib/context';
 import { AuthHeader } from './AuthHeader';
+import { AuthCaptcha } from './AuthCaptcha';
 import { LoginSuccess } from './LoginSuccess';
 
 export function createLoginPage() {
@@ -24,6 +25,7 @@ export function createLoginPage() {
       authCallbackUrl,
       homePageUrl,
       legalLinks,
+      security,
     } = config;
 
     const [email, setEmail] = useState('');
@@ -32,6 +34,7 @@ export function createLoginPage() {
     const [authTypeLoading, setAuthTypeLoading] = useState<string | null>(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     const signInWithPassword = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -39,8 +42,20 @@ export function createLoginPage() {
       setSuccess('');
       setAuthTypeLoading('email');
 
+      if (security?.captcha?.siteKey && !captchaToken) {
+        setError('Please complete the security check.');
+        setAuthTypeLoading(null);
+        return;
+      }
+
       try {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ 
+          email, 
+          password,
+          options: {
+            captchaToken: captchaToken || undefined,
+          }
+        });
         if (error) throw error;
         setSuccess('Welcome back!');
         setTimeout(() => (window.location.href = redirectAfterLogin), 1500);
@@ -72,17 +87,11 @@ export function createLoginPage() {
 
     return (
       <div className="min-h-screen flex flex-col p-4 relative overflow-hidden bg-slate-50">
-        {/* Background Decor */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-          <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-200/40 rounded-full blur-[80px]" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px]" />
-        </div>
-
         <AuthHeader homePageUrl={homePageUrl} logo={logo} appName={appName} />
 
         {/* Form centered */}
-        <div className="flex-1 flex items-center justify-center relative z-10">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="flex-1 flex items-center justify-center relative">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-10">
             {success ? (
               <LoginSuccess email={email} />
             ) : (
@@ -147,6 +156,8 @@ export function createLoginPage() {
                   <span>{success}</span>
                 </div>
               )}
+
+              <AuthCaptcha onVerify={setCaptchaToken} />
 
               <button
                 type="submit"

@@ -7,6 +7,8 @@ export default function Home() {
     { href: '/auth/register', label: 'Register' },
     { href: '/auth/forgot-password', label: 'Forgot Password' },
     { href: '/auth/reset-password', label: 'Reset Password' },
+    { href: '/auth/login?appId=crm', label: 'Login to CRM (Test Feature)' },
+    { href: '/auth/login?appId=shop', label: 'Login to Shop (Test Feature)' },
   ];
 
   return (
