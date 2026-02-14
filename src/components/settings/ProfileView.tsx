@@ -1,19 +1,23 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { User, Camera, LayoutDashboard } from 'lucide-react';
 import { Button, TextField } from '../ui';
 
 interface ProfileViewProps {
-  session: any;
+  session: Session;
   supabase: SupabaseClient;
   showToast: (message: string, type?: 'success' | 'error') => void;
 }
 
+const initialFullName = (s: Session) => s.user.user_metadata?.full_name || '';
+
 export default function ProfileView({ session, supabase, showToast }: ProfileViewProps) {
   const [loading, setLoading] = useState(false);
-  const [fullName, setFullName] = useState(session.user.user_metadata?.full_name || '');
+  const [fullName, setFullName] = useState(initialFullName(session));
+
+  const hasChanges = fullName !== initialFullName(session);
 
   const handleUpdate = async () => {
     setLoading(true);
@@ -41,7 +45,7 @@ export default function ProfileView({ session, supabase, showToast }: ProfileVie
                 </div>
               </div>
             </div>
-            <Button onClick={handleUpdate} loading={loading}>Save Changes</Button>
+            <Button onClick={handleUpdate} loading={loading} disabled={!hasChanges || loading}>Save Changes</Button>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

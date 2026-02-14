@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <AuthUIProvider
         config={{
-          logo: <AppLogo /> as any,
+          logo: <AppLogo />,
           appName: 'JS Shared Example',
           apps: {
             crm: 'Customer System',
@@ -46,6 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           ],
         }}
       >
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {children as any}
       </AuthUIProvider>
     </AuthProvider>

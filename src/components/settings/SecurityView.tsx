@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { Lock, ShieldCheck } from 'lucide-react';
 import { Button, TextField } from '../ui';
 
 interface SecurityViewProps {
-  session: any;
+  session: Session;
   supabase: SupabaseClient;
   showToast: (message: string, type?: 'success' | 'error') => void;
 }
 
-export default function SecurityView({ session, supabase, showToast }: SecurityViewProps) {
+export default function SecurityView({ supabase, showToast }: SecurityViewProps) {
   const [loading, setLoading] = useState(false);
   const [passwords, setPasswords] = useState({ new: '', confirm: '' });
 
@@ -53,7 +53,7 @@ export default function SecurityView({ session, supabase, showToast }: SecurityV
             onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
           />
           <div className="pt-2">
-            <Button type="submit" loading={loading} variant="secondary">Update Password</Button>
+            <Button type="submit" loading={loading} variant="secondary" disabled={loading || !passwords.new || !passwords.confirm}>Update Password</Button>
           </div>
         </form>
       </div>
