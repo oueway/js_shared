@@ -5,6 +5,7 @@ import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { 
   User, 
   Loader2, 
+  LogOut,
   ShieldCheck, 
   CheckCircle,
   AlertCircle,
@@ -65,7 +66,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }: { icon: React.Eleme
   </button>
 );
 
-export function SettingsPopup({ supabase, isOpen, onClose, additionalTabs = [] }: SettingsPopupProps) {
+export function SettingsPopup({ supabase, isOpen, onClose, onSignOut, additionalTabs = [] }: SettingsPopupProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState('profile');
@@ -167,17 +168,17 @@ export function SettingsPopup({ supabase, isOpen, onClose, additionalTabs = [] }
               </nav>
 
               <div className="p-4 border-t border-slate-100">
-                <div className="flex items-center gap-3 px-3 py-3 bg-slate-50 rounded-lg">
-                  <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold border border-indigo-200">
-                    {session.user.email?.[0].toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">
-                      {session.user.user_metadata?.full_name || 'User'}
-                    </p>
-                    <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
-                  </div>
-                </div>
+                <button
+                  onClick={async () => {
+                    if (onSignOut) onSignOut();
+                    else await supabase.auth.signOut();
+                    onClose();
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+                >
+                  <LogOut size={18} className="text-slate-400" />
+                  Log Out
+                </button>
               </div>
             </aside>
 

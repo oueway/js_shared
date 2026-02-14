@@ -53,7 +53,7 @@ export default function SecurityView({ supabase, showToast }: SecurityViewProps)
             onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
           />
           <div className="pt-2">
-            <Button type="submit" loading={loading} variant="secondary">Update Password</Button>
+            <Button type="submit" loading={loading} variant="secondary" disabled={loading || !passwords.new || !passwords.confirm}>Update Password</Button>
           </div>
         </form>
       </div>
