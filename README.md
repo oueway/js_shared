@@ -11,7 +11,6 @@ Reusable authentication utilities and UI components for Supabase-powered Next.js
 - 🎯 Full TypeScript support
 - 🔄 Works with multiple Supabase projects
 - ⚡ Build your own auth pages with provided components
-- ✅ **Comprehensive test coverage with Vitest + React Testing Library** (50 tests, 86%+ coverage)
 
 ## Why This Approach?
 
@@ -116,15 +115,6 @@ export default function LoginPage() {
 }
 ```
 
-## Complete Examples
-
-See [USAGE.md](./USAGE.md) for complete examples of:
-- Login page with OAuth
-- Registration with duplicate email check
-- Password reset flow
-- Dashboard with profile management
-- Multi-project setup
-
 ## Available Components
 
 ### UI Components
@@ -194,39 +184,6 @@ Full TypeScript support with exported types:
 import type { AuthConfig, ProxyConfig } from '@oueway/js-shared/lib';
 import type { HeaderLogoProps } from '@oueway/js-shared/components';
 ```
-
-## Testing
-
-This package includes comprehensive test coverage using Vitest and React Testing Library.
-
-### Running Tests
-
-```bash
-# Run all tests
-pnpm test
-
-# Watch mode
-pnpm test --watch
-
-# Coverage report
-pnpm test:coverage
-
-# UI mode
-pnpm test:ui
-```
-
-### Test Coverage
-
-- **50 test cases** across 6 test files
-- **86%+ code coverage**
-- Tests for components, utilities, and authentication pages
-- Full mocking of Supabase client
-- User interaction testing with @testing-library/user-event
-
-For more details, see:
-- [TESTING.md](./TESTING.md) - Complete testing guide
-- [TEST_QUICK_REFERENCE.md](./TEST_QUICK_REFERENCE.md) - Quick reference
-- [TEST_SUMMARY.md](./TEST_SUMMARY.md) - Test coverage summary
 
 ## License
 
